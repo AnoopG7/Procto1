@@ -1,0 +1,113 @@
+{
+  "currentExam": {
+    "id": "1",
+    "title": "Mathematics Final Exam",
+    "duration": "2 hours",
+    "timeRemaining": "1h 23m",
+    "progress": 38,
+    "totalCandidates": 45,
+    "activeCandidates": 43,
+    "instructor": "Dr. Smith",
+    "startedAt": "10:00 AM"
+  },
+  "candidates": [
+    {
+      "id": "1",
+      "name": "Alice Johnson",
+      "email": "alice.johnson@email.com",
+      "status": "connected",
+      "videoEnabled": true,
+      "audioEnabled": true,
+      "screenSharing": true,
+      "warnings": 0,
+      "lastActivity": "2 min ago",
+      "suspiciousActivity": [],
+      "location": "Room A-101",
+      "ipAddress": "192.168.1.45",
+      "browser": "Chrome 115.0",
+      "timeSpent": "36 min"
+    },
+    {
+      "id": "2", 
+      "name": "Bob Smith",
+      "email": "bob.smith@email.com",
+      "status": "suspicious",
+      "videoEnabled": true,
+      "audioEnabled": false,
+      "screenSharing": true,
+      "warnings": 2,
+      "lastActivity": "1 min ago",
+      "suspiciousActivity": [
+        "Multiple browser tabs detected",
+        "Face detection lost"
+      ],
+      "location": "Room A-102",
+      "ipAddress": "192.168.1.46",
+      "browser": "Firefox 114.0",
+      "timeSpent": "38 min"
+    },
+    {
+      "id": "3",
+      "name": "Carol Davis", 
+      "email": "carol.davis@email.com",
+      "status": "flagged",
+      "videoEnabled": false,
+      "audioEnabled": true,
+      "screenSharing": false,
+      "warnings": 5,
+      "lastActivity": "30 sec ago",
+      "suspiciousActivity": [
+        "Camera disabled",
+        "Screen sharing stopped",
+        "Suspicious eye movement",
+        "Multiple faces detected",
+        "External device connected"
+      ],
+      "location": "Room A-103",
+      "ipAddress": "192.168.1.47",
+      "browser": "Safari 16.0",
+      "timeSpent": "22 min"
+    },
+    {
+      "id": "4",
+      "name": "David Wilson",
+      "email": "david.wilson@email.com", 
+      "status": "connected",
+      "videoEnabled": true,
+      "audioEnabled": true,
+      "screenSharing": true,
+      "warnings": 1,
+      "lastActivity": "1 min ago",
+      "suspiciousActivity": [
+        "Brief window focus lost"
+      ],
+      "location": "Room A-104",
+      "ipAddress": "192.168.1.48",
+      "browser": "Chrome 115.0",
+      "timeSpent": "35 min"
+    }
+  ],
+  "alertSettings": {
+    "autoFlag": true,
+    "soundAlerts": true,
+    "emailNotifications": true,
+    "suspiciousBehaviorThreshold": 3
+  },
+  "monitoringControls": [
+    {
+      "id": "auto-flag",
+      "label": "Auto-flag suspicious behavior",
+      "enabled": true
+    },
+    {
+      "id": "sound-alerts",
+      "label": "Sound alerts",
+      "enabled": true
+    },
+    {
+      "id": "email-notifications",
+      "label": "Email notifications", 
+      "enabled": false
+    }
+  ]
+}

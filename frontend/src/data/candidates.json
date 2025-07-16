@@ -1,0 +1,111 @@
+{
+  "candidates": [
+    {
+      "id": "1",
+      "name": "Alice Johnson",
+      "email": "alice.johnson@email.com",
+      "phone": "+1 (555) 123-4567",
+      "studentId": "STU001",
+      "department": "Computer Science",
+      "year": "3rd Year",
+      "registeredExams": 5,
+      "completedExams": 4,
+      "averageScore": 85,
+      "status": "active",
+      "lastActive": "2 hours ago",
+      "profileImage": null,
+      "dateOfBirth": "1999-05-15",
+      "address": "123 Main St, City, State",
+      "enrollmentDate": "2022-09-01"
+    },
+    {
+      "id": "2",
+      "name": "Bob Smith",
+      "email": "bob.smith@email.com",
+      "phone": "+1 (555) 234-5678",
+      "studentId": "STU002",
+      "department": "Mathematics",
+      "year": "2nd Year",
+      "registeredExams": 3,
+      "completedExams": 3,
+      "averageScore": 78,
+      "status": "active",
+      "lastActive": "1 day ago",
+      "profileImage": null,
+      "dateOfBirth": "2000-08-22",
+      "address": "456 Oak Ave, City, State",
+      "enrollmentDate": "2023-09-01"
+    },
+    {
+      "id": "3",
+      "name": "Carol Davis",
+      "email": "carol.davis@email.com",
+      "phone": "+1 (555) 345-6789",
+      "studentId": "STU003",
+      "department": "Physics",
+      "year": "4th Year",
+      "registeredExams": 7,
+      "completedExams": 5,
+      "averageScore": 92,
+      "status": "suspended",
+      "lastActive": "1 week ago",
+      "profileImage": null,
+      "dateOfBirth": "1998-12-10",
+      "address": "789 Pine St, City, State",
+      "enrollmentDate": "2021-09-01"
+    },
+    {
+      "id": "4",
+      "name": "David Wilson",
+      "email": "david.wilson@email.com",
+      "phone": "+1 (555) 456-7890",
+      "studentId": "STU004",
+      "department": "Computer Science",
+      "year": "1st Year",
+      "registeredExams": 2,
+      "completedExams": 1,
+      "averageScore": 67,
+      "status": "active",
+      "lastActive": "3 hours ago",
+      "profileImage": null,
+      "dateOfBirth": "2001-03-18",
+      "address": "321 Elm St, City, State",
+      "enrollmentDate": "2024-09-01"
+    }
+  ],
+  "departments": [
+    "Computer Science",
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Engineering",
+    "Psychology",
+    "Business Administration",
+    "Economics"
+  ],
+  "years": [
+    "1st Year",
+    "2nd Year", 
+    "3rd Year",
+    "4th Year",
+    "Graduate"
+  ],
+  "statuses": [
+    {
+      "value": "active",
+      "label": "Active",
+      "color": "success"
+    },
+    {
+      "value": "inactive", 
+      "label": "Inactive",
+      "color": "default"
+    },
+    {
+      "value": "suspended",
+      "label": "Suspended",
+      "color": "error"
+    }
+  ]
+}

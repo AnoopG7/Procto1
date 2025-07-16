@@ -1,0 +1,121 @@
+{
+  "stats": [
+    {
+      "id": "active-exams",
+      "title": "Active Exams",
+      "value": 5,
+      "icon": "Assessment",
+      "color": "primary",
+      "trend": "+12%",
+      "description": "Currently running exams"
+    },
+    {
+      "id": "total-candidates",
+      "title": "Total Candidates",
+      "value": 1247,
+      "icon": "People",
+      "color": "success",
+      "trend": "+8%",
+      "description": "Registered candidates"
+    },
+    {
+      "id": "scheduled-today",
+      "title": "Scheduled Today",
+      "value": 12,
+      "icon": "Schedule",
+      "color": "warning",
+      "trend": "+3",
+      "description": "Exams scheduled for today"
+    },
+    {
+      "id": "security-alerts",
+      "title": "Security Alerts",
+      "value": 3,
+      "icon": "Security",
+      "color": "error",
+      "trend": "-2",
+      "description": "Active security incidents"
+    }
+  ],
+  "systemStatus": [
+    {
+      "id": "server-load",
+      "title": "Server Load",
+      "value": 35,
+      "status": "optimal",
+      "description": "35% (Optimal)"
+    },
+    {
+      "id": "bandwidth-usage",
+      "title": "Bandwidth Usage",
+      "value": 67,
+      "status": "high",
+      "description": "67% (High)"
+    },
+    {
+      "id": "active-connections",
+      "title": "Active Connections",
+      "value": 82,
+      "status": "good",
+      "description": "82% (Good)"
+    }
+  ],
+  "recentExams": [
+    {
+      "id": "1",
+      "title": "Mathematics Final Exam",
+      "startTime": "10:00 AM",
+      "duration": "2 hours",
+      "candidates": 45,
+      "status": "ongoing",
+      "subject": "Advanced Mathematics",
+      "instructor": "Dr. Smith"
+    },
+    {
+      "id": "2",
+      "title": "Computer Science Quiz",
+      "startTime": "2:00 PM",
+      "duration": "1 hour",
+      "candidates": 32,
+      "status": "upcoming",
+      "subject": "Data Structures",
+      "instructor": "Prof. Johnson"
+    },
+    {
+      "id": "3",
+      "title": "Physics Midterm",
+      "startTime": "9:00 AM",
+      "duration": "1.5 hours",
+      "candidates": 67,
+      "status": "completed",
+      "subject": "Quantum Physics",
+      "instructor": "Dr. Davis"
+    }
+  ],
+  "quickActions": [
+    {
+      "id": "create-exam",
+      "title": "Create New Exam",
+      "description": "Set up a new examination",
+      "icon": "Add",
+      "color": "primary",
+      "route": "/exams"
+    },
+    {
+      "id": "monitor-live",
+      "title": "Live Monitoring",
+      "description": "Monitor ongoing exams",
+      "icon": "Visibility",
+      "color": "success",
+      "route": "/monitoring"
+    },
+    {
+      "id": "view-reports",
+      "title": "View Reports",
+      "description": "Check exam analytics",
+      "icon": "BarChart",
+      "color": "info",
+      "route": "/reports"
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "exams": [
+    {
+      "id": "1",
+      "title": "Mathematics Final Exam",
+      "subject": "Advanced Mathematics",
+      "startDate": "Jul 20, 2025 10:00 AM",
+      "duration": 2,
+      "totalCandidates": 50,
+      "registeredCandidates": 45,
+      "status": "scheduled",
+      "instructor": "Dr. Smith",
+      "department": "Mathematics",
+      "proctoring": {
+        "videoMonitoring": true,
+        "screenSharing": true,
+        "browserLock": true,
+        "aiDetection": true,
+        "audioRecording": true,
+        "plagiarismCheck": true
+      },
+      "settings": {
+        "allowedAttempts": 1,
+        "shuffleQuestions": true,
+        "showResults": false,
+        "passScore": 60
+      }
+    },
+    {
+      "id": "2",
+      "title": "Computer Science Quiz",
+      "subject": "Data Structures",
+      "startDate": "Jul 22, 2025 2:00 PM",
+      "duration": 1,
+      "totalCandidates": 40,
+      "registeredCandidates": 32,
+      "status": "draft",
+      "instructor": "Prof. Johnson",
+      "department": "Computer Science",
+      "proctoring": {
+        "videoMonitoring": true,
+        "screenSharing": false,
+        "browserLock": true,
+        "aiDetection": false,
+        "audioRecording": false,
+        "plagiarismCheck": true
+      },
+      "settings": {
+        "allowedAttempts": 2,
+        "shuffleQuestions": true,
+        "showResults": true,
+        "passScore": 70
+      }
+    },
+    {
+      "id": "3",
+      "title": "Physics Midterm",
+      "subject": "Quantum Physics",
+      "startDate": "Jul 16, 2025 9:00 AM",
+      "duration": 1.5,
+      "totalCandidates": 70,
+      "registeredCandidates": 67,
+      "status": "completed",
+      "instructor": "Dr. Davis",
+      "department": "Physics",
+      "proctoring": {
+        "videoMonitoring": true,
+        "screenSharing": true,
+        "browserLock": true,
+        "aiDetection": true,
+        "audioRecording": true,
+        "plagiarismCheck": true
+      },
+      "settings": {
+        "allowedAttempts": 1,
+        "shuffleQuestions": false,
+        "showResults": false,
+        "passScore": 65
+      }
+    }
+  ],
+  "departments": [
+    "Computer Science",
+    "Mathematics", 
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Engineering",
+    "Psychology"
+  ],
+  "examTemplates": [
+    {
+      "id": "quiz",
+      "name": "Quick Quiz",
+      "duration": 0.5,
+      "description": "Short quiz for assessment"
+    },
+    {
+      "id": "midterm",
+      "name": "Midterm Exam", 
+      "duration": 1.5,
+      "description": "Standard midterm examination"
+    },
+    {
+      "id": "final",
+      "name": "Final Exam",
+      "duration": 3,
+      "description": "Comprehensive final examination"
+    }
+  ]
+}

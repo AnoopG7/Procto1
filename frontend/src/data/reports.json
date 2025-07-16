@@ -1,0 +1,135 @@
+{
+  "examReports": [
+    {
+      "id": "1",
+      "examTitle": "Mathematics Final Exam",
+      "subject": "Mathematics",
+      "date": "Jul 16, 2025",
+      "duration": "2 hours",
+      "totalCandidates": 45,
+      "completedCandidates": 43,
+      "averageScore": 78,
+      "violations": 7,
+      "status": "completed",
+      "instructor": "Dr. Smith",
+      "passRate": 89,
+      "highestScore": 98,
+      "lowestScore": 45
+    },
+    {
+      "id": "2",
+      "examTitle": "Physics Midterm",
+      "subject": "Physics", 
+      "date": "Jul 15, 2025",
+      "duration": "1.5 hours",
+      "totalCandidates": 67,
+      "completedCandidates": 65,
+      "averageScore": 82,
+      "violations": 3,
+      "status": "completed",
+      "instructor": "Dr. Davis",
+      "passRate": 92,
+      "highestScore": 96,
+      "lowestScore": 52
+    },
+    {
+      "id": "3",
+      "examTitle": "Computer Science Quiz",
+      "subject": "Computer Science",
+      "date": "Jul 17, 2025",
+      "duration": "1 hour",
+      "totalCandidates": 32,
+      "completedCandidates": 28,
+      "averageScore": 74,
+      "violations": 12,
+      "status": "ongoing",
+      "instructor": "Prof. Johnson",
+      "passRate": 75,
+      "highestScore": 92,
+      "lowestScore": 38
+    }
+  ],
+  "candidateResults": [
+    {
+      "id": "1",
+      "name": "Alice Johnson",
+      "email": "alice.johnson@email.com",
+      "score": 85,
+      "timeSpent": "1h 45m",
+      "violations": 0,
+      "status": "completed",
+      "lastSeen": "2h ago",
+      "suspiciousActivities": [],
+      "submissionTime": "11:45 AM",
+      "questionsAnswered": 50,
+      "totalQuestions": 50
+    },
+    {
+      "id": "2",
+      "name": "Bob Smith",
+      "email": "bob.smith@email.com",
+      "score": 72,
+      "timeSpent": "1h 50m",
+      "violations": 2,
+      "status": "completed",
+      "lastSeen": "2h ago", 
+      "suspiciousActivities": [
+        "Multiple browser tabs detected",
+        "Face detection lost"
+      ],
+      "submissionTime": "11:50 AM",
+      "questionsAnswered": 48,
+      "totalQuestions": 50
+    },
+    {
+      "id": "3",
+      "name": "Carol Davis",
+      "email": "carol.davis@email.com",
+      "score": 0,
+      "timeSpent": "45m",
+      "violations": 5,
+      "status": "disqualified",
+      "lastSeen": "2h ago",
+      "suspiciousActivities": [
+        "Camera disabled",
+        "Screen sharing stopped", 
+        "Suspicious eye movement"
+      ],
+      "submissionTime": "10:45 AM",
+      "questionsAnswered": 23,
+      "totalQuestions": 50
+    }
+  ],
+  "violationTypes": [
+    {
+      "type": "Multiple browser tabs",
+      "count": 8,
+      "severity": "medium"
+    },
+    {
+      "type": "Camera disabled",
+      "count": 3,
+      "severity": "high"
+    },
+    {
+      "type": "Face detection lost",
+      "count": 12,
+      "severity": "medium"
+    },
+    {
+      "type": "Screen sharing stopped",
+      "count": 2,
+      "severity": "high"
+    },
+    {
+      "type": "Suspicious eye movement",
+      "count": 7,
+      "severity": "low"
+    }
+  ],
+  "filters": {
+    "subjects": ["All Subjects", "Mathematics", "Physics", "Computer Science", "Chemistry"],
+    "statuses": ["All Status", "Completed", "Ongoing", "Cancelled"],
+    "dateRanges": ["Last 7 days", "Last 30 days", "Last 3 months", "Last year"]
+  }
+}
