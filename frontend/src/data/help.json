@@ -1,0 +1,90 @@
+{
+  "hero": {
+    "title": "Help & Support Center",
+    "subtitle": "Find answers to your questions or get in touch with our support team for personalized assistance"
+  },
+  "quickActions": [
+    {
+      "title": "Video Tutorials",
+      "description": "Watch step-by-step guides",
+      "icon": "VideoLibrary"
+    },
+    {
+      "title": "User Manual",
+      "description": "Complete documentation",
+      "icon": "Book"
+    },
+    {
+      "title": "Live Chat",
+      "description": "Get instant support",
+      "icon": "Chat"
+    },
+    {
+      "title": "Knowledge Base",
+      "description": "Browse all articles",
+      "icon": "Article"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "How do I set up a new exam?",
+      "answer": "Navigate to the Exam Management section, click 'Create New Exam', and follow the step-by-step wizard to configure your exam settings, questions, and proctoring options.",
+      "category": "exams"
+    },
+    {
+      "question": "What browsers are supported for exam taking?",
+      "answer": "Procto supports the latest versions of Chrome, Firefox, Safari, and Edge. For the best experience, we recommend using Chrome with camera and microphone permissions enabled.",
+      "category": "technical"
+    },
+    {
+      "question": "How does the proctoring system work?",
+      "answer": "Our AI-powered proctoring system monitors video feeds, audio, and screen activity in real-time. It detects suspicious behavior and flags potential violations for review by administrators.",
+      "category": "proctoring"
+    },
+    {
+      "question": "Can students take exams on mobile devices?",
+      "answer": "Currently, exams can only be taken on desktop or laptop computers with webcam access. Mobile devices are not supported for security and monitoring purposes.",
+      "category": "technical"
+    },
+    {
+      "question": "How long are exam recordings stored?",
+      "answer": "Exam recordings are stored for 90 days by default, but this can be configured in the system settings. After the retention period, recordings are automatically deleted.",
+      "category": "privacy"
+    }
+  ],
+  "contactInfo": [
+    {
+      "title": "Email Support",
+      "value": "support@procto.com",
+      "description": "Send us an email anytime",
+      "icon": "Email"
+    },
+    {
+      "title": "Phone Support",
+      "value": "+1 (800) 123-4567",
+      "description": "Mon-Fri, 9AM-6PM EST",
+      "icon": "Phone"
+    },
+    {
+      "title": "Live Chat",
+      "value": "Available 24/7",
+      "description": "Get instant assistance",
+      "icon": "Chat"
+    }
+  ],
+  "systemStatus": {
+    "status": "Operational",
+    "color": "success",
+    "lastUpdated": "Today at 10:30 AM"
+  },
+  "supportTicket": {
+    "title": "Submit Support Ticket",
+    "priorityLevels": [
+      {"value": "low", "label": "Low"},
+      {"value": "medium", "label": "Medium"},
+      {"value": "high", "label": "High"},
+      {"value": "urgent", "label": "Urgent"}
+    ],
+    "responseTime": "Our support team typically responds within 2-4 hours during business hours."
+  }
+}

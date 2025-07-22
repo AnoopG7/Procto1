@@ -1,0 +1,152 @@
+{
+  "hero": {
+    "title": "Get in Touch",
+    "subtitle": "Have questions about Procto? Need technical support? Want to explore partnerships? Our expert team is here to help you succeed."
+  },
+  "quickActions": [
+    {
+      "title": "Live Chat",
+      "description": "Get instant help from our support team",
+      "icon": "Chat",
+      "color": "#6366f1"
+    },
+    {
+      "title": "Knowledge Base",
+      "description": "Browse our comprehensive help center",
+      "icon": "Assignment",
+      "color": "#06d6a0"
+    },
+    {
+      "title": "Emergency Support",
+      "description": "Critical issues during active exams",
+      "icon": "ContactSupport",
+      "color": "#f72585"
+    }
+  ],
+  "contactInfo": [
+    {
+      "icon": "Phone",
+      "title": "Phone Support",
+      "primary": "+1 (555) 123-4567",
+      "secondary": "Available 24/7 for urgent issues",
+      "color": "#6366f1",
+      "bgColor": "rgba(99, 102, 241, 0.1)"
+    },
+    {
+      "icon": "Email",
+      "title": "Email Support",
+      "primary": "support@procto.com",
+      "secondary": "Response within 24 hours",
+      "color": "#06d6a0",
+      "bgColor": "rgba(6, 214, 160, 0.1)"
+    },
+    {
+      "icon": "LocationOn",
+      "title": "Main Office",
+      "primary": "123 Education Street",
+      "secondary": "Learning City, LC 12345",
+      "color": "#f72585",
+      "bgColor": "rgba(247, 37, 133, 0.1)"
+    },
+    {
+      "icon": "Schedule",
+      "title": "Business Hours",
+      "primary": "Mon-Fri: 8AM-8PM EST",
+      "secondary": "Sat-Sun: 10AM-6PM EST",
+      "color": "#ffa726",
+      "bgColor": "rgba(255, 167, 38, 0.1)"
+    }
+  ],
+  "departments": [
+    {
+      "value": "general",
+      "label": "General Inquiry",
+      "icon": "Person"
+    },
+    {
+      "value": "technical",
+      "label": "Technical Support",
+      "icon": "Support"
+    },
+    {
+      "value": "sales",
+      "label": "Sales & Pricing",
+      "icon": "Business"
+    },
+    {
+      "value": "educational",
+      "label": "Educational Partnerships",
+      "icon": "School"
+    }
+  ],
+  "quickHelp": [
+    {
+      "title": "Browse FAQ",
+      "icon": "ContactSupport",
+      "description": "Find answers to common questions"
+    },
+    {
+      "title": "Download User Guide",
+      "icon": "Assignment",
+      "description": "Complete documentation and tutorials"
+    },
+    {
+      "title": "System Requirements",
+      "icon": "CheckCircle",
+      "description": "Technical specifications and compatibility"
+    },
+    {
+      "title": "Integration Guide",
+      "icon": "Security",
+      "description": "API documentation and setup instructions"
+    }
+  ],
+  "form": {
+    "title": "Send us a Message",
+    "subtitle": "Fill out the form below and we'll get back to you as soon as possible.",
+    "successMessage": "Thank you for your message! We'll get back to you within 24 hours.",
+    "fields": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "department": "Department",
+      "subject": "Subject",
+      "message": "Message",
+      "messagePlaceholder": "Tell us about your inquiry, technical issue, or how we can help..."
+    },
+    "submitText": "Send Message"
+  },
+  "support": {
+    "title": "Need immediate help?",
+    "description": "Our 24/7 support team is available for urgent technical issues. For general inquiries, expect responses within one business day."
+  },
+  "emergency": {
+    "title": "Emergency Support",
+    "subtitle": "Experiencing critical issues during an active exam? Contact our emergency support line immediately for instant assistance.",
+    "features": [
+      {
+        "icon": "AccessTime",
+        "text": "24/7 Availability"
+      },
+      {
+        "icon": "CheckCircle",
+        "text": "Instant Response"
+      },
+      {
+        "icon": "Security",
+        "text": "Secure Communication"
+      }
+    ],
+    "actions": [
+      {
+        "text": "Call Emergency Line",
+        "type": "primary",
+        "icon": "Phone"
+      },
+      {
+        "text": "Emergency Email",
+        "type": "secondary",
+        "icon": "Email"
+      }
+    ]
+  }
+}

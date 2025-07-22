@@ -1,0 +1,171 @@
+{
+  "hero": {
+    "chip": "🚀 Trusted by 500+ Universities",
+    "title": "Advanced AI-Powered Online Exam Proctoring",
+    "subtitle": "Ensure academic integrity with our cutting-edge AI technology. Procto delivers seamless, secure, and scalable online proctoring solutions trusted by leading educational institutions worldwide.",
+    "primaryCta": "Start Free Trial",
+    "secondaryCta": "Watch Demo"
+  },
+  "stats": [
+    {
+      "number": "10M+",
+      "label": "Exams Proctored",
+      "icon": "Assessment"
+    },
+    {
+      "number": "500+",
+      "label": "Universities",
+      "icon": "School"
+    },
+    {
+      "number": "99.9%",
+      "label": "Uptime",
+      "icon": "TrendingUp"
+    },
+    {
+      "number": "24/7",
+      "label": "Support",
+      "icon": "Groups"
+    }
+  ],
+  "features": [
+    {
+      "icon": "Security",
+      "title": "AI-Powered Proctoring",
+      "description": "Advanced AI technology monitors exam sessions to ensure academic integrity and prevent cheating.",
+      "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+    },
+    {
+      "icon": "Visibility",
+      "title": "Real-time Monitoring",
+      "description": "Live video and audio monitoring with instant alerts for suspicious activities during exams.",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+    },
+    {
+      "icon": "Assessment",
+      "title": "Comprehensive Analytics",
+      "description": "Detailed reports and analytics to track exam performance and identify potential issues.",
+      "gradient": "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+    },
+    {
+      "icon": "School",
+      "title": "Easy Integration",
+      "description": "Seamlessly integrate with existing LMS platforms and educational systems.",
+      "gradient": "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Dr. Sarah Johnson",
+      "role": "Professor, Stanford University",
+      "rating": 5,
+      "comment": "Procto has revolutionized our online examination process. The AI detection is incredibly accurate."
+    },
+    {
+      "name": "Mark Thompson",
+      "role": "IT Director, MIT",
+      "rating": 5,
+      "comment": "Easy to implement and use. Our faculty loves the comprehensive monitoring capabilities."
+    },
+    {
+      "name": "Lisa Chen",
+      "role": "Academic Coordinator, Harvard",
+      "rating": 4,
+      "comment": "Excellent platform for maintaining exam integrity in our remote learning environment."
+    }
+  ],
+  "advancedFeatures": [
+    {
+      "icon": "Psychology",
+      "title": "AI Behavior Analysis",
+      "description": "Advanced machine learning algorithms analyze behavioral patterns to detect suspicious activities",
+      "gradient": "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
+    },
+    {
+      "icon": "Speed",
+      "title": "Real-time Processing",
+      "description": "Lightning-fast analysis and instant alerts ensure immediate response to potential violations",
+      "gradient": "linear-gradient(135deg, #10b981 0%, #059669 100%)"
+    },
+    {
+      "icon": "CloudSync",
+      "title": "Cloud Infrastructure",
+      "description": "Scalable cloud-based architecture ensures reliability and performance at any scale",
+      "gradient": "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)"
+    },
+    {
+      "icon": "Shield",
+      "title": "Multi-layer Security",
+      "description": "Enterprise-grade security with end-to-end encryption and compliance certifications",
+      "gradient": "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
+    },
+    {
+      "icon": "Extension",
+      "title": "Platform Integration",
+      "description": "Seamless integration with popular LMS platforms and educational tools",
+      "gradient": "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)"
+    },
+    {
+      "icon": "BarChart",
+      "title": "Advanced Analytics",
+      "description": "Comprehensive reporting and analytics with actionable insights and trends",
+      "gradient": "linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)"
+    }
+  ],
+  "security": {
+    "title": "Enterprise Security & Compliance",
+    "description": "Built with enterprise-grade security and compliance standards to protect sensitive educational data",
+    "features": [
+      { "icon": "Lock", "title": "End-to-end Encryption", "desc": "AES-256 encryption" },
+      { "icon": "Verified", "title": "SOC 2 Certified", "desc": "Type II compliance" },
+      { "icon": "Shield", "title": "GDPR Compliant", "desc": "Full data protection" },
+      { "icon": "Notifications", "title": "Real-time Alerts", "desc": "Instant notifications" }
+    ],
+    "certifications": [
+      { "name": "SOC 2", "description": "Type II Certified" },
+      { "name": "ISO 27001", "description": "Information Security" },
+      { "name": "GDPR", "description": "Data Protection" },
+      { "name": "FERPA", "description": "Educational Privacy" }
+    ]
+  },
+  "pricing": [
+    {
+      "name": "Basic",
+      "price": "$29",
+      "period": "/month",
+      "description": "Perfect for small institutions",
+      "features": ["Up to 100 students", "Basic monitoring", "Email support", "24/7 uptime"],
+      "color": "linear-gradient(135deg, #374151 0%, #1f2937 100%)",
+      "popular": false
+    },
+    {
+      "name": "Professional",
+      "price": "$99",
+      "period": "/month",
+      "description": "Ideal for growing institutions",
+      "features": ["Up to 1,000 students", "Advanced AI monitoring", "Priority support", "Custom integrations"],
+      "color": "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
+      "popular": true
+    },
+    {
+      "name": "Enterprise",
+      "price": "Custom",
+      "period": "",
+      "description": "For large organizations",
+      "features": ["Unlimited students", "Full feature access", "Dedicated support", "Custom development"],
+      "color": "linear-gradient(135deg, #059669 0%, #047857 100%)",
+      "popular": false
+    }
+  ],
+  "cta": {
+    "title": "Ready to Get Started?",
+    "description": "Join thousands of institutions worldwide that trust Procto for their online examination needs.",
+    "benefits": [
+      "Free 30-day trial",
+      "No credit card required", 
+      "Setup in 5 minutes"
+    ],
+    "primaryCta": "Start Free Trial",
+    "secondaryCta": "Contact Sales"
+  }
+}

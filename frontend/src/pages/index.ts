@@ -2,6 +2,7 @@
 export { AdminDashboard } from './Admin/Dashboard';
 export { AdminCreateExam } from './Admin/AdminCreateExam';
 export { AdminExamProctor } from './Admin/AdminExamProctor';
+export { AdminExamManagement } from './Admin/AdminExamManagement';
 export { AdminAnalytics } from './Admin/AdminAnalytics';
 export { AdminUserManagement } from './Admin/AdminUserManagement';
 export { AdminSystemSettings } from './Admin/AdminSystemSettings';
@@ -10,14 +11,20 @@ export { AdminSystemSettings } from './Admin/AdminSystemSettings';
 export { StudentDashboard } from './Student/StudentDashboard';
 export { StudentExamSetup } from './Student/StudentExamSetup';
 export { StudentExam } from './Student/StudentExam';
+export { StudentExamTaking } from './Student/StudentExamTaking';
 export { StudentProfile } from './Student/StudentProfile';
 export { StudentExamHistory } from './Student/StudentExamHistory';
+export { StudentSettings } from './Student/StudentSettings';
+export { StudentAnalytics } from './Student/StudentAnalytics';
 
 // Proctorer pages
 export { ProctororDashboard } from './Proctorer/ProctororDashboard';
 export { ProctororExamPage } from './Proctorer/ProctororExamPage';
+export { ProctororExamMonitoring } from './Proctorer/ProctororExamMonitoring';
 export { ProctororProfile } from './Proctorer/ProctororProfile';
 export { ProctororExamReports } from './Proctorer/ProctororExamReports';
+export { ProctororSettings } from './Proctorer/ProctororSettings';
+export { ProctororAnalytics } from './Proctorer/ProctororAnalytics';
 
 // Shared/Legacy pages (to be moved/deprecated)
 export { Reports } from './Reports';

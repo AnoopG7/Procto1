@@ -20,7 +20,7 @@ import {
   TrendingUp,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { Layout } from '../../components/layout';
+import { LayoutWithoutSidebar } from '../../components/layout';
 import { StatsCard } from '../../components/stats';
 import { ExamCard } from '../../components/exam';
 import dashboardData from '../../data/dashboard.json';
@@ -85,7 +85,7 @@ export const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <Layout title="Procto - Dashboard">
+    <LayoutWithoutSidebar title="Procto - Dashboard">
       <Stack spacing={4}>
         {/* Header Section */}
         <Fade in timeout={500}>
@@ -310,6 +310,6 @@ export const AdminDashboard: React.FC = () => {
           </Box>
         </Fade>
       </Stack>
-    </Layout>
+    </LayoutWithoutSidebar>
   );
 };

@@ -26,7 +26,7 @@ import {
   Flag,
   NotificationsActive,
 } from '@mui/icons-material';
-import { Layout } from '../../components/layout';
+import { LayoutWithoutSidebar } from '../../components/layout';
 import { useNavigate } from 'react-router-dom';
 
 export function ProctororDashboard() {
@@ -101,7 +101,7 @@ export function ProctororDashboard() {
   };
 
   return (
-    <Layout title="Proctorer Dashboard">
+    <LayoutWithoutSidebar title="Proctorer Dashboard">
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <Stack spacing={4}>
           {/* Welcome Section */}
@@ -348,6 +348,6 @@ export function ProctororDashboard() {
           </Card>
         </Stack>
       </Container>
-    </Layout>
+    </LayoutWithoutSidebar>
   );
 }

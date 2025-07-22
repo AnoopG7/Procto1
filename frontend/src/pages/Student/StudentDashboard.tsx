@@ -26,7 +26,7 @@ import {
   Timer,
   CheckCircle,
 } from '@mui/icons-material';
-import { Layout } from '../../components/layout';
+import { LayoutWithoutSidebar } from '../../components/layout';
 import { useNavigate } from 'react-router-dom';
 
 export function StudentDashboard() {
@@ -82,7 +82,7 @@ export function StudentDashboard() {
   ];
 
   return (
-    <Layout title="Student Dashboard">
+    <LayoutWithoutSidebar title="Student Dashboard">
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <Stack spacing={4}>
           {/* Welcome Section */}
@@ -287,6 +287,6 @@ export function StudentDashboard() {
           </Card>
         </Stack>
       </Container>
-    </Layout>
+    </LayoutWithoutSidebar>
   );
 }

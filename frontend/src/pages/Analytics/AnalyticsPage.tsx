@@ -32,7 +32,7 @@ import {
   Cancel,
   MoreVert,
 } from '@mui/icons-material';
-import { Layout } from '../../components/layout';
+import { LayoutWithoutSidebar } from '../../components/layout';
 
 export function AnalyticsPage() {
   const stats = [
@@ -86,7 +86,7 @@ export function AnalyticsPage() {
   ];
 
   return (
-    <Layout title="Analytics Dashboard">
+    <LayoutWithoutSidebar title="Analytics Dashboard">
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <Stack spacing={4}>
           {/* Header */}
@@ -341,6 +341,6 @@ export function AnalyticsPage() {
           </Grid>
         </Stack>
       </Container>
-    </Layout>
+    </LayoutWithoutSidebar>
   );
 }

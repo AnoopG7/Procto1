@@ -1,0 +1,97 @@
+{
+  "hero": {
+    "title": "How can we help you?",
+    "subtitle": "Find instant answers in our comprehensive knowledge base",
+    "searchPlaceholder": "Search for answers..."
+  },
+  "categories": [
+    {
+      "id": "all",
+      "label": "All Questions",
+      "icon": "QuestionAnswer"
+    },
+    {
+      "id": "getting-started",
+      "label": "Getting Started",
+      "icon": "GetApp"
+    },
+    {
+      "id": "technical",
+      "label": "Technical",
+      "icon": "Build"
+    },
+    {
+      "id": "account",
+      "label": "Account",
+      "icon": "Person"
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "icon": "Security"
+    },
+    {
+      "id": "support",
+      "label": "Support",
+      "icon": "Support"
+    }
+  ],
+  "faqs": [
+    {
+      "category": "getting-started",
+      "question": "How do I create my first exam?",
+      "answer": "To create your first exam, navigate to the Admin Dashboard and click on \"Create New Exam\". Follow the step-by-step wizard to configure your exam settings, add questions, and set up proctoring options."
+    },
+    {
+      "category": "getting-started",
+      "question": "What devices are supported for taking exams?",
+      "answer": "Procto supports desktop and laptop computers running the latest versions of Chrome, Firefox, Safari, and Edge. Mobile devices are not supported for security reasons."
+    },
+    {
+      "category": "technical",
+      "question": "What are the minimum system requirements?",
+      "answer": "Minimum requirements include: Modern web browser, stable internet connection (minimum 1 Mbps), webcam, microphone, and at least 4GB RAM."
+    },
+    {
+      "category": "technical",
+      "question": "How do I troubleshoot camera or microphone issues?",
+      "answer": "First, ensure your browser has permission to access camera and microphone. Check your system settings and restart your browser. If issues persist, try using a different browser or contact support."
+    },
+    {
+      "category": "security",
+      "question": "How secure is the proctoring system?",
+      "answer": "Procto uses advanced AI algorithms and machine learning to detect suspicious behavior. All data is encrypted in transit and at rest, and recordings are stored securely with automatic deletion after the retention period."
+    },
+    {
+      "category": "security",
+      "question": "What types of violations can be detected?",
+      "answer": "Our AI can detect multiple faces, tab switching, window changes, audio anomalies, excessive movement, and other suspicious behaviors that may indicate cheating attempts."
+    },
+    {
+      "category": "support",
+      "question": "How can I contact support?",
+      "answer": "You can reach our support team through live chat, email (support@procto.com), or phone. Our support team is available 24/7 for urgent issues."
+    },
+    {
+      "category": "support",
+      "question": "What training is available for instructors?",
+      "answer": "We offer comprehensive training including video tutorials, webinars, documentation, and one-on-one training sessions for new users."
+    },
+    {
+      "category": "getting-started",
+      "question": "Can I integrate Procto with my existing LMS?",
+      "answer": "Yes, Procto integrates with popular LMS platforms including Canvas, Blackboard, Moodle, and others through APIs and LTI compliance."
+    },
+    {
+      "category": "technical",
+      "question": "How long are exam recordings stored?",
+      "answer": "Exam recordings are stored for 90 days by default, but this can be configured based on your institution's requirements. All recordings are automatically deleted after the retention period."
+    }
+  ],
+  "contact": {
+    "title": "Still need help?",
+    "description": "Our support team is here to help you 24/7. Get in touch and we'll get back to you as soon as possible.",
+    "primaryCta": "Contact Support",
+    "secondaryCta": "Browse Help Center"
+  }
+}
