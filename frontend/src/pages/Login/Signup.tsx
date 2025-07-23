@@ -16,7 +16,11 @@ import {
   Alert,
   Fade,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel
 } from '@mui/material';
 import { 
   Visibility, 
@@ -34,6 +38,7 @@ export default function SignUpPage() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('student');
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,6 +61,9 @@ export default function SignUpPage() {
       setError('Please agree to the Terms & Conditions');
       return;
     }
+    
+    // Here you would typically make an API call to register the user
+    console.log('Sign up:', { firstName, lastName, email, password, role });
     
     // Here you would typically make an API call to register the user
     console.log('Sign up:', { firstName, lastName, email, password });
@@ -282,6 +290,48 @@ export default function SignUpPage() {
                       '& .MuiInputBase-input': { color: 'white' }
                     }}
                   />
+                  
+                  <FormControl fullWidth>
+                    <InputLabel sx={{ color: 'rgba(255,255,255,0.7)' }}>Role</InputLabel>
+                    <Select
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      label="Role"
+                      sx={{
+                        color: 'white',
+                        '& .MuiOutlinedInput-notchedOutline': { 
+                          borderColor: 'rgba(255,255,255,0.2)' 
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': { 
+                          borderColor: 'rgba(255,255,255,0.4)' 
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': { 
+                          borderColor: '#8b5cf6' 
+                        },
+                        '& .MuiSvgIcon-root': { 
+                          color: 'rgba(255,255,255,0.7)' 
+                        }
+                      }}
+                      MenuProps={{
+                        PaperProps: {
+                          sx: {
+                            bgcolor: 'rgba(30, 41, 59, 0.95)',
+                            color: 'white',
+                            '& .MuiMenuItem-root:hover': {
+                              bgcolor: 'rgba(139, 92, 246, 0.15)'
+                            },
+                            '& .MuiMenuItem-root.Mui-selected': {
+                              bgcolor: 'rgba(139, 92, 246, 0.2)'
+                            }
+                          }
+                        }
+                      }}
+                    >
+                      <MenuItem value="student">Student</MenuItem>
+                      <MenuItem value="proctor">Proctor</MenuItem>
+                      <MenuItem value="admin">Administrator</MenuItem>
+                    </Select>
+                  </FormControl>
 
                   <FormControlLabel
                     control={
