@@ -32,7 +32,6 @@ import {
   Cancel,
   MoreVert,
 } from '@mui/icons-material';
-import { Layout } from '../../components/layout';
 
 export function AdminAnalytics() {
   const stats = [
@@ -86,7 +85,6 @@ export function AdminAnalytics() {
   ];
 
   return (
-    <Layout title="Analytics Dashboard">
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <Stack spacing={4}>
           {/* Header */}
@@ -341,6 +339,5 @@ export function AdminAnalytics() {
           </Grid>
         </Stack>
       </Container>
-    </Layout>
   );
 }

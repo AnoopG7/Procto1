@@ -65,11 +65,13 @@ export default function SignUpPage() {
     // Here you would typically make an API call to register the user
     console.log('Sign up:', { firstName, lastName, email, password, role });
     
-    // Here you would typically make an API call to register the user
-    console.log('Sign up:', { firstName, lastName, email, password });
-    
     // For demo purposes, simulate successful registration
     setError(null);
+    
+    // Store the role for after verification
+    sessionStorage.setItem('userRole', role);
+    
+    // Navigate to verification page
     navigate('/verify');
   };
 

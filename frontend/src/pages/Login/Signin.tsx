@@ -55,14 +55,25 @@ export default function SignInPage() {
     }
     
     // Here you would typically make an API call to authenticate the user
-    console.log('Sign in:', { email, password, role });
-    
-    // Here you would typically make an API call to authenticate
-    console.log('Sign in:', { email, password, rememberMe });
+    console.log('Sign in:', { email, password, role, rememberMe });
     
     // For demo purposes, simulate successful login
     setError(null);
-    navigate('/dashboard');
+    
+    // Route to appropriate dashboard based on role
+    switch (role) {
+      case 'admin':
+        navigate('/admin/dashboard');
+        break;
+      case 'proctor':
+        navigate('/proctor/dashboard');
+        break;
+      case 'student':
+        navigate('/student/dashboard');
+        break;
+      default:
+        navigate('/dashboard');
+    }
   };
 
   const handleTogglePassword = () => {

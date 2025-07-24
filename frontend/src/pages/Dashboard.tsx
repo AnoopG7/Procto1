@@ -20,7 +20,6 @@ import {
   Stop,
   Visibility,
 } from '@mui/icons-material';
-import { LayoutWithoutSidebar } from '../components/layout';
 
 interface StatsCardProps {
   title: string;
@@ -165,15 +164,14 @@ export const Dashboard: React.FC = () => {
   ];
 
   return (
-    <LayoutWithoutSidebar title="Procto - Dashboard">
-      <Stack spacing={3}>
-        {/* Header */}
-        <Box>
-          <Typography variant="h4" fontWeight="bold" gutterBottom>
-            Dashboard
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Monitor and manage your exam proctoring sessions
+    <Stack spacing={3}>
+      {/* Header */}
+      <Box>
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          Dashboard
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Monitor and manage your exam proctoring sessions
           </Typography>
         </Box>
 
@@ -250,6 +248,6 @@ export const Dashboard: React.FC = () => {
           </Stack>
         </Box>
       </Stack>
-    </LayoutWithoutSidebar>
+    </Stack>
   );
 };

@@ -2,6 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
+    mode: 'light', // Keep as light for compatibility
     primary: {
       main: '#1976d2',
       light: '#42a5f5',
@@ -16,6 +17,10 @@ export const theme = createTheme({
       default: '#f5f5f5',
       paper: '#ffffff',
     },
+    text: {
+      primary: '#000000', // For light backgrounds
+      secondary: '#888888', // Lighter for better contrast on both light and dark backgrounds
+    }
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',

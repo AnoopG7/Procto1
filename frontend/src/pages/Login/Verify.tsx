@@ -145,7 +145,26 @@ export default function VerifyPage() {
       if (otpCode === '123456') { // Example validation
         setVerificationSuccess(true);
         setTimeout(() => {
-          navigate('/dashboard'); // Redirect after successful verification
+          // Get the stored role from session storage or default to student
+          const userRole = sessionStorage.getItem('userRole') || 'student';
+          
+          // Route to appropriate dashboard based on role
+          switch (userRole) {
+            case 'admin':
+              navigate('/admin/dashboard');
+              break;
+            case 'proctor':
+              navigate('/proctor/dashboard');
+              break;
+            case 'student':
+              navigate('/student/dashboard');
+              break;
+            default:
+              navigate('/dashboard');
+          }
+          
+          // Clear the stored role
+          sessionStorage.removeItem('userRole');
         }, 2000);
       } else {
         setError('Invalid verification code. Please try again.');
@@ -356,7 +375,7 @@ export default function VerifyPage() {
                       {isVerifying ? 'Verifying...' : 'Verify Account'}
                     </Button>
 
-                    <Box textAlign="center" sx={{ mt: 2, width: '100%' }}>
+                    <Box textAlign="center">
                       <Typography 
                         variant="body2" 
                         sx={{ 
@@ -371,28 +390,16 @@ export default function VerifyPage() {
                       </Typography>
                       
                       <Button
-                        variant={canResend ? "outlined" : "outlined"}
+                        variant="text"
                         disabled={!canResend}
                         onClick={handleResendCode}
-                        startIcon={<LockReset sx={{ color: canResend ? '#8b5cf6' : 'rgba(255,255,255,0.7)' }} />}
+                        startIcon={<LockReset />}
                         sx={{
-                          mt: 1,
-                          py: 1,
-                          px: 2,
                           textTransform: 'none',
-                          color: canResend ? '#8b5cf6' : 'rgba(255,255,255,0.7)',
-                          borderColor: canResend ? '#8b5cf6' : 'rgba(255,255,255,0.3)',
-                          backgroundColor: 'rgba(255,255,255,0.05)',
+                          color: canResend ? '#8b5cf6' : 'rgba(255,255,255,0.5)',
                           '&:hover': {
-                            backgroundColor: canResend ? 'rgba(139, 92, 246, 0.08)' : 'rgba(255,255,255,0.08)',
-                            borderColor: canResend ? '#a78bfa' : 'rgba(255,255,255,0.4)'
-                          },
-                          '&.Mui-disabled': {
-                            color: 'rgba(255,255,255,0.7)',
-                            borderColor: 'rgba(255,255,255,0.3)'
-                          },
-                          display: 'inline-flex',
-                          visibility: 'visible'
+                            backgroundColor: canResend ? 'rgba(139, 92, 246, 0.08)' : undefined
+                          }
                         }}
                       >
                         Resend verification code

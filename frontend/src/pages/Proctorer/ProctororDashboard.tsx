@@ -16,6 +16,8 @@ import {
   TableRow,
   IconButton,
   LinearProgress,
+  Paper,
+  Box,
 } from '@mui/material';
 import {
   Visibility,
@@ -133,7 +135,7 @@ export function ProctororDashboard() {
           {/* Stats Cards */}
           <Grid container spacing={3}>
             {stats.map((stat, index) => (
-              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+              <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card>
                   <CardContent>
                     <Stack spacing={2} alignItems="center" textAlign="center">
@@ -153,7 +155,7 @@ export function ProctororDashboard() {
 
           <Grid container spacing={4}>
             {/* Active Exams */}
-            <Grid size={{ xs: 12, lg: 8 }}>
+            <Grid item xs={12} lg={8}>
               <Card>
                 <CardContent>
                   <Stack spacing={3}>
@@ -240,7 +242,7 @@ export function ProctororDashboard() {
             </Grid>
 
             {/* Recent Alerts */}
-            <Grid size={{ xs: 12, lg: 4 }}>
+            <Grid item xs={12} lg={4}>
               <Card>
                 <CardContent>
                   <Stack spacing={3}>
@@ -293,59 +295,225 @@ export function ProctororDashboard() {
           </Grid>
 
           {/* Quick Actions */}
-          <Card>
-            <CardContent>
-              <Stack spacing={3}>
-                <Typography variant="h6">Quick Actions</Typography>
-                <Grid container spacing={2}>
-                  <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Button
-                      variant="outlined"
-                      fullWidth
-                      startIcon={<Visibility />}
-                      onClick={() => navigate('/proctorer/live-monitoring')}
-                      sx={{ py: 2 }}
+          <Box
+            sx={{
+              width: '100%',
+              minHeight: '500px', 
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mb: 3
+            }}
+          >
+            <Paper
+              elevation={10}
+              sx={{
+                borderRadius: 3,
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 15px 30px -12px rgba(0, 0, 0, 0.3)',
+                overflow: 'hidden',
+                position: 'relative',
+                width: '100%'
+              }}
+            >
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: '-20px',
+                  right: '10%',
+                  width: '180px',
+                  height: '180px',
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+                  filter: 'blur(30px)',
+                  zIndex: 0
+                }}
+              />
+            <CardContent sx={{ p: 4, width: '100%', textAlign: 'center' }}>
+              <Typography 
+                variant="h5" 
+                sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  gap: 1,
+                  color: 'white',
+                  fontWeight: 700,
+                  mb: 5,
+                  pb: 2,
+                  borderBottom: '1px solid rgba(255,255,255,0.1)',
+                  width: '100%',
+                  textAlign: 'center',
+                  letterSpacing: '0.5px'
+                }}
+              >
+                Quick Actions
+              </Typography>
+
+              <Grid container spacing={4} justifyContent="center" alignItems="stretch">
+                <Grid item xs={12} sm={6} md={3}>
+                  <Button
+                    fullWidth
+                    onClick={() => navigate('/proctorer/live-monitoring')}
+                    sx={{
+                      py: 3,
+                      px: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 2,
+                      background: 'rgba(99, 102, 241, 0.1)',
+                      border: '1px solid rgba(99, 102, 241, 0.2)',
+                      borderRadius: 3,
+                      color: 'white',
+                      textTransform: 'none',
+                      transition: 'all 0.3s ease',
+                      height: '100%',
+                      '&:hover': {
+                        background: 'rgba(99, 102, 241, 0.2)',
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 10px 25px rgba(99, 102, 241, 0.4)'
+                      }
+                    }}
+                  >
+                    <Avatar 
+                      sx={{
+                        bgcolor: 'rgba(99, 102, 241, 0.2)',
+                        color: '#6366f1',
+                        width: 64,
+                        height: 64,
+                        mb: 1
+                      }}
                     >
-                      Live Monitoring
-                    </Button>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Button
-                      variant="outlined"
-                      fullWidth
-                      startIcon={<Flag />}
-                      onClick={() => navigate('/proctorer/violations')}
-                      sx={{ py: 2 }}
-                    >
-                      Violation Reports
-                    </Button>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Button
-                      variant="outlined"
-                      fullWidth
-                      startIcon={<Assessment />}
-                      onClick={() => navigate('/proctorer/exams')}
-                      sx={{ py: 2 }}
-                    >
-                      Exam Sessions
-                    </Button>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Button
-                      variant="outlined"
-                      fullWidth
-                      startIcon={<Security />}
-                      onClick={() => navigate('/proctorer/profile')}
-                      sx={{ py: 2 }}
-                    >
-                      Profile Settings
-                    </Button>
-                  </Grid>
+                      <Visibility />
+                    </Avatar>
+                    <Typography fontWeight={600}>Live Monitoring</Typography>
+                  </Button>
                 </Grid>
-              </Stack>
+
+                <Grid item xs={12} sm={6} md={3}>
+                  <Button
+                    fullWidth
+                    onClick={() => navigate('/proctorer/violations')}
+                    sx={{
+                      py: 3,
+                      px: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 2,
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      border: '1px solid rgba(239, 68, 68, 0.2)',
+                      borderRadius: 3,
+                      color: 'white',
+                      textTransform: 'none',
+                      transition: 'all 0.3s ease',
+                      height: '100%',
+                      '&:hover': {
+                        background: 'rgba(239, 68, 68, 0.2)',
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 10px 25px rgba(239, 68, 68, 0.4)'
+                      }
+                    }}
+                  >
+                    <Avatar 
+                      sx={{
+                        bgcolor: 'rgba(239, 68, 68, 0.2)',
+                        color: '#ef4444',
+                        width: 64,
+                        height: 64,
+                        mb: 1
+                      }}
+                    >
+                      <Flag />
+                    </Avatar>
+                    <Typography fontWeight={600}>Violation Reports</Typography>
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={3}>
+                  <Button
+                    fullWidth
+                    onClick={() => navigate('/proctorer/exams')}
+                    sx={{
+                      py: 3,
+                      px: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 2,
+                      background: 'rgba(16, 185, 129, 0.1)',
+                      border: '1px solid rgba(16, 185, 129, 0.2)',
+                      borderRadius: 3,
+                      color: 'white',
+                      textTransform: 'none',
+                      transition: 'all 0.3s ease',
+                      height: '100%',
+                      '&:hover': {
+                        background: 'rgba(16, 185, 129, 0.2)',
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 10px 25px rgba(16, 185, 129, 0.4)'
+                      }
+                    }}
+                  >
+                    <Avatar 
+                      sx={{
+                        bgcolor: 'rgba(16, 185, 129, 0.2)',
+                        color: '#10b981',
+                        width: 50,
+                        height: 50
+                      }}
+                    >
+                      <Assessment />
+                    </Avatar>
+                    <Typography fontWeight={600}>Exam Sessions</Typography>
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={3}>
+                  <Button
+                    fullWidth
+                    onClick={() => navigate('/proctorer/profile')}
+                    sx={{
+                      py: 3,
+                      px: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 2,
+                      background: 'rgba(139, 92, 246, 0.1)',
+                      border: '1px solid rgba(139, 92, 246, 0.2)',
+                      borderRadius: 3,
+                      color: 'white',
+                      textTransform: 'none',
+                      transition: 'all 0.3s ease',
+                      height: '100%',
+                      '&:hover': {
+                        background: 'rgba(139, 92, 246, 0.2)',
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 10px 25px rgba(139, 92, 246, 0.4)'
+                      }
+                    }}
+                  >
+                    <Avatar 
+                      sx={{
+                        bgcolor: 'rgba(139, 92, 246, 0.2)',
+                        color: '#8b5cf6',
+                        width: 50,
+                        height: 50
+                      }}
+                    >
+                      <Security />
+                    </Avatar>
+                    <Typography fontWeight={600}>Profile Settings</Typography>
+                  </Button>
+                </Grid>
+              </Grid>
             </CardContent>
-          </Card>
+            </Paper>
+          </Box>
         </Stack>
       </Container>
     </LayoutWithoutSidebar>

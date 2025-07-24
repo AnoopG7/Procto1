@@ -1,5 +1,5 @@
 // Admin pages
-export { AdminDashboard } from './Admin/Dashboard';
+export { AdminDashboard } from './Admin/AdminDashboard';
 export { AdminCreateExam } from './Admin/AdminCreateExam';
 export { AdminExamProctor } from './Admin/AdminExamProctor';
 export { AdminExamManagement } from './Admin/AdminExamManagement';

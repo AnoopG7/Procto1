@@ -1,0 +1,240 @@
+{
+  "hero": {
+    "title": "Admin Command Center",
+    "subtitle": "Welcome back! Here's what's happening with your proctoring system today.",
+    "chip": "All Systems Operational",
+    "lastUpdated": "Real-time data"
+  },
+  "stats": [
+    {
+      "id": "1",
+      "title": "Total Exams",
+      "value": 124,
+      "change": "+12%",
+      "trend": "up",
+      "icon": "Assessment",
+      "color": "primary",
+      "description": "Active exams in system",
+      "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+    },
+    {
+      "id": "2",
+      "title": "Active Students",
+      "value": 2847,
+      "change": "+8%",
+      "trend": "up",
+      "icon": "People",
+      "color": "success",
+      "description": "Currently enrolled",
+      "gradient": "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+    },
+    {
+      "id": "3",
+      "title": "Completion Rate",
+      "value": 94.5,
+      "change": "+2.3%",
+      "trend": "up",
+      "icon": "CheckCircle",
+      "color": "info",
+      "description": "Average completion rate",
+      "suffix": "%",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+    },
+    {
+      "id": "4",
+      "title": "System Health",
+      "value": 99.9,
+      "change": "+0.1%",
+      "trend": "up",
+      "icon": "Computer",
+      "color": "success",
+      "description": "Uptime percentage",
+      "suffix": "%",
+      "gradient": "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"
+    }
+  ],
+  "quickActions": [
+    {
+      "id": "1",
+      "title": "Create New Exam",
+      "description": "Set up a new proctored examination",
+      "icon": "Add",
+      "color": "primary",
+      "route": "/admin/create-exam",
+      "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+    },
+    {
+      "id": "2",
+      "title": "Monitor Live Sessions",
+      "description": "View ongoing exam sessions",
+      "icon": "Visibility",
+      "color": "secondary",
+      "route": "/admin/monitoring",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+    },
+    {
+      "id": "3",
+      "title": "User Management",
+      "description": "Manage students and proctors",
+      "icon": "People",
+      "color": "info",
+      "route": "/admin/users",
+      "gradient": "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+    },
+    {
+      "id": "4",
+      "title": "Analytics Dashboard",
+      "description": "View detailed reports and insights",
+      "icon": "BarChart",
+      "color": "success",
+      "route": "/admin/analytics",
+      "gradient": "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"
+    },
+    {
+      "id": "5",
+      "title": "System Settings",
+      "description": "Configure system preferences",
+      "icon": "Settings",
+      "color": "warning",
+      "route": "/admin/settings",
+      "gradient": "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
+    },
+    {
+      "id": "6",
+      "title": "Security Center",
+      "description": "Review security settings and logs",
+      "icon": "Security",
+      "color": "error",
+      "route": "/admin/security",
+      "gradient": "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"
+    }
+  ],
+  "recentActivities": [
+    {
+      "id": "1",
+      "type": "exam_created",
+      "title": "New exam created",
+      "description": "Advanced Mathematics - Final Exam",
+      "time": "2 minutes ago",
+      "icon": "Add",
+      "color": "primary"
+    },
+    {
+      "id": "2",
+      "type": "student_flagged",
+      "title": "Student flagged for review",
+      "description": "Suspicious activity detected in CS101",
+      "time": "15 minutes ago",
+      "icon": "Flag",
+      "color": "warning"
+    },
+    {
+      "id": "3",
+      "type": "exam_completed",
+      "title": "Exam session completed",
+      "description": "Physics Midterm - 45 students participated",
+      "time": "1 hour ago",
+      "icon": "CheckCircle",
+      "color": "success"
+    },
+    {
+      "id": "4",
+      "type": "system_alert",
+      "title": "System maintenance completed",
+      "description": "All services are running normally",
+      "time": "3 hours ago",
+      "icon": "Settings",
+      "color": "info"
+    }
+  ],
+  "systemPerformance": [
+    {
+      "id": "server-load",
+      "title": "Server Load",
+      "value": 35,
+      "status": "success",
+      "description": "Optimal"
+    },
+    {
+      "id": "memory-usage",
+      "title": "Memory Usage",
+      "value": 68,
+      "status": "warning",
+      "description": "Good"
+    },
+    {
+      "id": "database-performance",
+      "title": "Database Performance",
+      "value": 92,
+      "status": "success",
+      "description": "Excellent"
+    },
+    {
+      "id": "network-latency",
+      "title": "Network Latency",
+      "value": 15,
+      "status": "success",
+      "description": "15ms - Excellent"
+    }
+  ],
+  "upcomingExams": [
+    {
+      "id": "1",
+      "title": "Computer Science Final",
+      "subject": "CS101",
+      "date": "2025-07-25",
+      "time": "10:00 AM",
+      "students": 45,
+      "duration": "3 hours",
+      "status": "upcoming"
+    },
+    {
+      "id": "2",
+      "title": "Mathematics Midterm",
+      "subject": "MATH201",
+      "date": "2025-07-26",
+      "time": "2:00 PM",
+      "students": 32,
+      "duration": "2 hours",
+      "status": "upcoming"
+    },
+    {
+      "id": "3",
+      "title": "Physics Lab Assessment",
+      "subject": "PHY301",
+      "date": "2025-07-27",
+      "time": "9:00 AM",
+      "students": 28,
+      "duration": "2.5 hours",
+      "status": "upcoming"
+    }
+  ],
+  "liveExams": [
+    {
+      "id": "1",
+      "title": "Biology Exam",
+      "subject": "BIO101",
+      "startTime": "09:00 AM",
+      "students": 38,
+      "duration": "2 hours",
+      "progress": 65,
+      "issues": 0
+    },
+    {
+      "id": "2",
+      "title": "Chemistry Lab",
+      "subject": "CHEM201",
+      "startTime": "11:00 AM",
+      "students": 22,
+      "duration": "1.5 hours",
+      "progress": 40,
+      "issues": 1
+    }
+  ],
+  "securityOverview": {
+    "totalFlags": 3,
+    "resolvedToday": 8,
+    "avgResponseTime": "2.3 min",
+    "riskLevel": "Low"
+  }
+}

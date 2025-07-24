@@ -42,7 +42,6 @@ import {
   Search,
   FilterList,
 } from '@mui/icons-material';
-import { Layout } from '../components/layout';
 import candidatesData from '../data/candidates.json';
 
 interface Candidate {
@@ -180,15 +179,14 @@ export const Candidates: React.FC = () => {
   });
 
   return (
-    <Layout title="Procto - Candidate Management">
-      <Stack spacing={3}>
-        {/* Header */}
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Box>
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
-              Candidate Management
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
+    <Stack spacing={3}>
+      {/* Header */}
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Box>
+          <Typography variant="h4" fontWeight="bold" gutterBottom>
+            Candidate Management
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
               Manage student registrations and profiles
             </Typography>
           </Box>
@@ -531,6 +529,6 @@ export const Candidates: React.FC = () => {
           </DialogActions>
         </Dialog>
       </Stack>
-    </Layout>
+
   );
 };

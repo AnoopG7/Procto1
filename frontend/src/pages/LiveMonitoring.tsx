@@ -35,7 +35,6 @@ import {
   Block,
   VolumeUp,
 } from '@mui/icons-material';
-import { Layout } from '../components/layout';
 import monitoringData from '../data/monitoring.json';
 
 interface Candidate {
@@ -209,7 +208,6 @@ export const LiveMonitoring: React.FC = () => {
   const flaggedCount = candidates.filter(c => c.status === 'flagged').length;
 
   return (
-    <Layout title="Procto - Live Monitoring">
       <Stack spacing={3}>
         {/* Header */}
         <Box>
@@ -495,6 +493,5 @@ export const LiveMonitoring: React.FC = () => {
           </DialogActions>
         </Dialog>
       </Stack>
-    </Layout>
   );
 };

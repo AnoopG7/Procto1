@@ -202,7 +202,7 @@ export function AdminUserManagement() {
                 <Typography variant="h4" fontWeight={600}>
                   User Management
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   Manage students, proctorers, and administrators
                 </Typography>
               </Stack>
@@ -238,7 +238,7 @@ export function AdminUserManagement() {
                       <Typography variant="h4" fontWeight={600}>
                         {stats.total}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         Total Users
                       </Typography>
                     </Stack>
@@ -257,7 +257,7 @@ export function AdminUserManagement() {
                       <Typography variant="h4" fontWeight={600}>
                         {stats.students}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         Students
                       </Typography>
                     </Stack>
@@ -276,7 +276,7 @@ export function AdminUserManagement() {
                       <Typography variant="h4" fontWeight={600}>
                         {stats.proctorers}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         Proctorers
                       </Typography>
                     </Stack>
@@ -295,7 +295,7 @@ export function AdminUserManagement() {
                       <Typography variant="h4" fontWeight={600}>
                         {stats.admins}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         Admins
                       </Typography>
                     </Stack>
@@ -314,7 +314,7 @@ export function AdminUserManagement() {
                       <Typography variant="h4" fontWeight={600}>
                         {stats.active}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         Active Users
                       </Typography>
                     </Stack>
@@ -417,7 +417,7 @@ export function AdminUserManagement() {
                                   <Typography variant="subtitle2" fontWeight={600}>
                                     {user.name}
                                   </Typography>
-                                  <Typography variant="body2" color="text.secondary">
+                                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                     {user.email}
                                   </Typography>
                                 </Stack>
@@ -463,7 +463,7 @@ export function AdminUserManagement() {
                                 </Typography>
                               )}
                               {user.role === 'admin' && (
-                                <Typography variant="body2" color="text.secondary">
+                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                   Administrator
                                 </Typography>
                               )}
