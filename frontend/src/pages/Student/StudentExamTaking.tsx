@@ -1,402 +1,560 @@
+import React, { useRef, useState, useEffect } from "react";
 import {
-  Typography,
   Container,
-  Grid,
-  Stack,
   Card,
   CardContent,
+  Typography,
   Button,
-  LinearProgress,
   Alert,
-  Avatar,
-  Chip,
-  IconButton,
+  Stack,
+  TextField,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import {
-  Quiz,
-  Timer,
-  Save,
-  Send,
-  CheckCircle,
-  VolumeUp,
-  Camera,
-  Security,
-  Help,
-} from '@mui/icons-material';
-import { useState, useEffect } from 'react';
+  Grid,
+} from "@mui/material";
+
+type SwitchClip = {
+  webcamBlob: Blob;
+  screenBlob: Blob;
+  start: number;
+  end: number;
+  type: string;
+};
+
+const questions = [
+  {
+    label: "1. Describe your approach to problem-solving:",
+    type: "textarea",
+    name: "q1",
+  },
+  {
+    label: "2. What motivates you during exams?",
+    type: "textarea",
+    name: "q2",
+  },
+  {
+    label: "3. How do you manage stress?",
+    type: "textarea",
+    name: "q3",
+  },
+  {
+    label: "4. Give an example of a challenge you overcame:",
+    type: "textarea",
+    name: "q4",
+  },
+  {
+    label: "5. Which of the following is a programming language?",
+    type: "radio",
+    name: "q5",
+    options: ["Python", "Elephant", "Banana", "Car"],
+  },
+  {
+    label: "6. HTML stands for:",
+    type: "radio",
+    name: "q6",
+    options: [
+      "HyperText Markup Language",
+      "HighText Machine Language",
+      "HyperText Markdown Language",
+      "None of these",
+    ],
+  },
+  {
+    label: "7. CSS is used for:",
+    type: "radio",
+    name: "q7",
+    options: [
+      "Styling web pages",
+      "Database management",
+      "Networking",
+      "Operating systems",
+    ],
+  },
+  {
+    label: "8. JavaScript can be used to:",
+    type: "radio",
+    name: "q8",
+    options: [
+      "Make web pages interactive",
+      "Wash dishes",
+      "Cook food",
+      "None of these",
+    ],
+  },
+  {
+    label: "9. Which tag is used to display images in HTML?",
+    type: "radio",
+    name: "q9",
+    options: ["img", "image", "src", "pic"],
+  },
+  {
+    label: "10. Which one is a front-end framework?",
+    type: "radio",
+    name: "q10",
+    options: ["React", "Node.js", "MongoDB", "Express"],
+  },
+];
 
 export function StudentExamTaking() {
-  const [timeRemaining, setTimeRemaining] = useState(5400); // 90 minutes in seconds
-  const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [showSubmitDialog, setShowSubmitDialog] = useState(false);
-  const [examStarted, setExamStarted] = useState(false);
+  // --- State ---
+  const [step, setStep] = useState<"preview" | "exam" | "results">("preview");
+  const [permissionError, setPermissionError] = useState<string>("");
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [timeLeft, setTimeLeft] = useState(300); // 5 min
+  const [countdownActive, setCountdownActive] = useState(false);
+  const [switchClips, setSwitchClips] = useState<SwitchClip[]>([]);
+  const [showDialog, setShowDialog] = useState(false);
 
-  // Mock exam data
-  const examData = {
-    id: 'EXAM001',
-    title: 'Advanced Mathematics Final Examination',
-    course: 'MATH 401',
-    instructor: 'Dr. Sarah Johnson',
-    duration: 90, // minutes
-    totalQuestions: 25,
-    instructions: [
-      'Read all questions carefully before answering',
-      'You can navigate between questions using the navigation panel',
-      'Your progress is automatically saved every 30 seconds',
-      'Submit your exam before time expires',
-      'Use of external resources is strictly prohibited'
-    ],
-    proctoring: {
-      enabled: true,
-      cameraRequired: true,
-      microphoneRequired: true,
-      screenRecording: true,
-      lockdownBrowser: true
-    }
-  };
+  // --- Refs for media streams and recorders ---
+  const webcamStreamRef = useRef<MediaStream | null>(null);
+  const screenStreamRef = useRef<MediaStream | null>(null);
+  const webcamPreviewRef = useRef<HTMLVideoElement>(null);
+  const screenPreviewRef = useRef<HTMLVideoElement>(null);
 
-  const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    if (hours > 0) {
-      return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
-    return `${minutes}:${secs.toString().padStart(2, '0')}`;
-  };
+  // Recording state
+  const webcamRecorderRef = useRef<MediaRecorder | null>(null);
+  const screenRecorderRef = useRef<MediaRecorder | null>(null);
+  const webcamChunksRef = useRef<Blob[]>([]);
+  const screenChunksRef = useRef<Blob[]>([]);
+  const isRecordingSwitchRef = useRef(false);
+  const switchStartTimeRef = useRef<number>(0);
+  const lastSwitchTypeRef = useRef<string | null>(null);
 
-  const getTimeColor = () => {
-    if (timeRemaining < 600) return 'error'; // Less than 10 minutes
-    if (timeRemaining < 1800) return 'warning'; // Less than 30 minutes
-    return 'primary';
-  };
-
+  // --- Permissions & Preview ---
   useEffect(() => {
-    if (examStarted && timeRemaining > 0) {
-      const timer = setInterval(() => {
-        setTimeRemaining(prev => prev - 1);
-      }, 1000);
-      return () => clearInterval(timer);
+    if (step === "preview") {
+      (async () => {
+        setPermissionError("");
+        try {
+          const webcamStream = await navigator.mediaDevices.getUserMedia({
+            video: { width: 320, height: 240, frameRate: { ideal: 10, max: 15 } },
+            audio: false,
+          });
+          webcamStreamRef.current = webcamStream;
+          if (webcamPreviewRef.current) {
+            webcamPreviewRef.current.srcObject = webcamStream;
+          }
+        } catch {
+          setPermissionError("Webcam permission denied.");
+        }
+        try {
+          const screenStream = await navigator.mediaDevices.getDisplayMedia({
+            video: { width: 640, height: 360, frameRate: { ideal: 10, max: 15 } },
+            audio: false,
+          });
+          screenStreamRef.current = screenStream;
+          if (screenPreviewRef.current) {
+            screenPreviewRef.current.srcObject = screenStream;
+          }
+        } catch {
+          setPermissionError("Screen permission denied.");
+        }
+      })();
     }
-  }, [examStarted, timeRemaining]);
+    // Cleanup streams on unmount
+    return () => {
+      webcamStreamRef.current?.getTracks().forEach((t) => t.stop());
+      screenStreamRef.current?.getTracks().forEach((t) => t.stop());
+    };
+  }, [step]);
 
-  if (!examStarted) {
+  // --- Countdown ---
+  useEffect(() => {
+    if (!countdownActive) return;
+    if (timeLeft <= 0) {
+      setCountdownActive(false);
+      handleSubmit();
+      return;
+    }
+    const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
+    return () => clearInterval(timer);
+  }, [countdownActive, timeLeft]);
+
+  // --- Tab/Window Switch Monitoring ---
+  useEffect(() => {
+    if (step !== "exam") return;
+
+    // Use both visibilitychange and blur/focus
+    const handleVisibility = () => {
+      if (document.hidden) {
+        lastSwitchTypeRef.current = "tab";
+        startSwitchRecording("tab");
+      } else {
+        stopSwitchRecording();
+      }
+    };
+    const handleBlur = () => {
+      if (!isRecordingSwitchRef.current) {
+        lastSwitchTypeRef.current = "window";
+        startSwitchRecording("window");
+      }
+    };
+    const handleFocus = () => stopSwitchRecording();
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("blur", handleBlur);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [step]);
+
+  // --- Recording Functions ---
+  function startSwitchRecording(type: string) {
+    if (isRecordingSwitchRef.current) return;
+    isRecordingSwitchRef.current = true;
+    webcamChunksRef.current = [];
+    screenChunksRef.current = [];
+    switchStartTimeRef.current = Date.now();
+
+    const webcamStream = webcamStreamRef.current;
+    const screenStream = screenStreamRef.current;
+    if (!webcamStream || !screenStream) return;
+
+    let webcamRecorder: MediaRecorder;
+    let screenRecorder: MediaRecorder;
+
+    try {
+      webcamRecorder = new MediaRecorder(webcamStream, {
+        mimeType: "video/webm;codecs=vp8",
+        videoBitsPerSecond: 100 * 1000,
+      });
+    } catch (err) {
+      setPermissionError("Webcam recording failed to start.");
+      return;
+    }
+    try {
+      screenRecorder = new MediaRecorder(screenStream, {
+        mimeType: "video/webm;codecs=vp8",
+        videoBitsPerSecond: 200 * 1000,
+      });
+    } catch (err) {
+      setPermissionError("Screen recording failed to start.");
+      return;
+    }
+
+    webcamRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) webcamChunksRef.current.push(e.data);
+    };
+    screenRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) screenChunksRef.current.push(e.data);
+    };
+
+    webcamRecorder.onerror = (e) => {
+      setPermissionError("Webcam recording error: " + e.error?.name);
+    };
+    screenRecorder.onerror = (e) => {
+      setPermissionError("Screen recording error: " + e.error?.name);
+    };
+
+    webcamRecorder.onstop = () => {
+      const webcamBlob = new Blob(webcamChunksRef.current, { type: "video/webm" });
+      const screenBlob = new Blob(screenChunksRef.current, { type: "video/webm" });
+      setSwitchClips((prev) => [
+        ...prev,
+        {
+          webcamBlob,
+          screenBlob,
+          start: switchStartTimeRef.current,
+          end: Date.now(),
+          type: type || lastSwitchTypeRef.current || "unknown",
+        },
+      ]);
+    };
+
+    webcamRecorder.start();
+    screenRecorder.start();
+
+    webcamRecorderRef.current = webcamRecorder;
+    screenRecorderRef.current = screenRecorder;
+  }
+
+  function stopSwitchRecording() {
+    if (!isRecordingSwitchRef.current) return;
+    isRecordingSwitchRef.current = false;
+    if (webcamRecorderRef.current && webcamRecorderRef.current.state !== "inactive")
+      webcamRecorderRef.current.stop();
+    if (screenRecorderRef.current && screenRecorderRef.current.state !== "inactive")
+      screenRecorderRef.current.stop();
+  }
+
+  // --- Exam Start ---
+  function handleStartExam() {
+    if (!webcamStreamRef.current || !screenStreamRef.current) {
+      setPermissionError("Please allow webcam and screen permissions.");
+      return;
+    }
+    setStep("exam");
+    setCountdownActive(true);
+  }
+
+  // --- Exam Submission ---
+  function handleSubmit(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    setCountdownActive(false);
+    stopSwitchRecording();
+    webcamStreamRef.current?.getTracks().forEach((t) => t.stop());
+    screenStreamRef.current?.getTracks().forEach((t) => t.stop());
+    setStep("results");
+  }
+
+  // --- Results ---
+  function renderResults() {
     return (
-      <Container maxWidth="lg" sx={{ py: 4, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-        <Grid container spacing={4} justifyContent="center">
-          <Grid size={{ xs: 12, md: 8 }}>
-            <Card>
-              <CardContent sx={{ p: 4 }}>
-                <Stack spacing={4} alignItems="center">
-                  <Avatar sx={{ bgcolor: 'primary.main', width: 80, height: 80 }}>
-                    <Quiz sx={{ fontSize: 40 }} />
-                  </Avatar>
-                  
-                  <Stack spacing={2} textAlign="center">
-                    <Typography variant="h4" fontWeight={600}>
-                      {examData.title}
-                    </Typography>
-                    <Typography variant="h6" color="text.secondary">
-                      {examData.course} • {examData.instructor}
-                    </Typography>
-                    <Stack direction="row" justifyContent="center" spacing={2}>
-                      <Chip
-                        icon={<Timer />}
-                        label={`${examData.duration} minutes`}
-                        color="primary"
-                      />
-                      <Chip
-                        icon={<Quiz />}
-                        label={`${examData.totalQuestions} questions`}
-                        color="info"
-                      />
-                    </Stack>
-                  </Stack>
-
-                  {/* Proctoring Status */}
-                  {examData.proctoring.enabled && (
-                    <Alert severity="info" sx={{ width: '100%' }}>
-                      <Typography variant="body2">
-                        <strong>Proctored Exam:</strong> This exam is monitored using AI proctoring technology.
-                        Ensure your camera and microphone are enabled.
-                      </Typography>
-                    </Alert>
-                  )}
-
-                  {/* System Checks */}
-                  <Card sx={{ width: '100%', bgcolor: 'grey.50' }}>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        System Checks
-                      </Typography>
-                      <List dense>
-                        <ListItem>
-                          <ListItemIcon>
-                            <CheckCircle color="success" />
-                          </ListItemIcon>
-                          <ListItemText primary="Camera Access" secondary="Enabled and working" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon>
-                            <CheckCircle color="success" />
-                          </ListItemIcon>
-                          <ListItemText primary="Microphone Access" secondary="Enabled and working" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon>
-                            <CheckCircle color="success" />
-                          </ListItemIcon>
-                          <ListItemText primary="Internet Connection" secondary="Stable connection detected" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon>
-                            <CheckCircle color="success" />
-                          </ListItemIcon>
-                          <ListItemText primary="Browser Compatibility" secondary="Supported browser detected" />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-
-                  {/* Instructions */}
-                  <Card sx={{ width: '100%' }}>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        Exam Instructions
-                      </Typography>
-                      <List>
-                        {examData.instructions.map((instruction, index) => (
-                          <ListItem key={index}>
-                            <ListItemIcon>
-                              <Typography variant="body2" fontWeight={600}>
-                                {index + 1}.
-                              </Typography>
-                            </ListItemIcon>
-                            <ListItemText primary={instruction} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </CardContent>
-                  </Card>
-
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => setExamStarted(true)}
-                    sx={{ px: 6, py: 2 }}
-                  >
-                    Start Exam
-                  </Button>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+      <Container maxWidth="sm" sx={{ py: 4 }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h5" fontWeight={700} align="center" gutterBottom>
+              Exam Proctoring Results
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              Tab/Window Switch Recordings:
+            </Typography>
+            <Stack spacing={2} sx={{ mb: 4 }}>
+              {switchClips.length === 0 ? (
+                <Typography color="text.secondary">
+                  No tab/window switch events detected. Good job staying focused!
+                </Typography>
+              ) : (
+                switchClips.map((clip, i) => {
+                  const webcamUrl = URL.createObjectURL(clip.webcamBlob);
+                  const screenUrl = URL.createObjectURL(clip.screenBlob);
+                  const duration = Math.round((clip.end - clip.start) / 1000);
+                  const timeString = new Date(clip.start).toLocaleTimeString();
+                  return (
+                    <Card key={i} variant="outlined">
+                      <CardContent>
+                        <Typography fontWeight={600}>
+                          Switch #{i + 1}{" "}
+                          <span style={{ color: "#888", fontSize: 12 }}>
+                            ({clip.type === "tab" ? "Tab Switch" : "Window Switch"}, {timeString}, {duration}s)
+                          </span>
+                        </Typography>
+                        <Grid container spacing={2} sx={{ mt: 1 }}>
+                          <Grid item xs={6}>
+                            <Typography fontWeight={500} fontSize={14}>
+                              Face:
+                            </Typography>
+                            <video
+                              controls
+                              style={{ width: "100%", maxHeight: 120, background: "#000", borderRadius: 8 }}
+                              preload="metadata"
+                            >
+                              <source src={webcamUrl} type="video/webm" />
+                              Your browser does not support the video tag.
+                            </video>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography fontWeight={500} fontSize={14}>
+                              Screen:
+                            </Typography>
+                            <video
+                              controls
+                              style={{ width: "100%", maxHeight: 120, background: "#000", borderRadius: 8 }}
+                              preload="metadata"
+                            >
+                              <source src={screenUrl} type="video/webm" />
+                              Your browser does not support the video tag.
+                            </video>
+                          </Grid>
+                        </Grid>
+                      </CardContent>
+                    </Card>
+                  );
+                })
+              )}
+            </Stack>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              Your Answers:
+            </Typography>
+            <Stack spacing={2}>
+              {questions.map((q) => (
+                <div key={q.name}>
+                  <Typography fontWeight={600}>{q.label}</Typography>
+                  <Typography color="text.secondary">{answers[q.name]}</Typography>
+                </div>
+              ))}
+            </Stack>
+          </CardContent>
+        </Card>
       </Container>
     );
   }
 
-  return (
-    <Container maxWidth="xl" sx={{ py: 2, minHeight: '100vh' }}>
-      <Stack spacing={2}>
-        {/* Exam Header */}
+  // --- Exam Form ---
+  function renderExamForm() {
+    return (
+      <Container maxWidth="sm" sx={{ py: 4 }}>
         <Card>
-          <CardContent sx={{ py: 2 }}>
-            <Grid container alignItems="center" spacing={2}>
-              <Grid size={{ xs: 12, md: 4 }}>
-                <Stack>
-                  <Typography variant="h6" fontWeight={600}>
-                    {examData.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Question {currentQuestion} of {examData.totalQuestions}
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid size={{ xs: 12, md: 4 }}>
-                <Stack direction="row" alignItems="center" spacing={1} justifyContent="center">
-                  <Timer color={getTimeColor()} />
-                  <Typography 
-                    variant="h6" 
-                    fontWeight={600}
-                    color={`${getTimeColor()}.main`}
-                  >
-                    {formatTime(timeRemaining)}
-                  </Typography>
-                </Stack>
-                <LinearProgress
-                  variant="determinate"
-                  value={((examData.duration * 60 - timeRemaining) / (examData.duration * 60)) * 100}
-                  color={getTimeColor()}
-                  sx={{ mt: 1 }}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 4 }}>
-                <Stack direction="row" spacing={1} justifyContent="flex-end">
-                  <Button
-                    variant="outlined"
-                    startIcon={<Save />}
-                    size="small"
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    variant="contained"
-                    startIcon={<Send />}
-                    size="small"
-                    onClick={() => setShowSubmitDialog(true)}
-                  >
-                    Submit
-                  </Button>
-                </Stack>
-              </Grid>
-            </Grid>
+          <CardContent>
+            <Typography variant="h5" fontWeight={700} align="center" gutterBottom>
+              Exam
+            </Typography>
+            <Typography align="center" color="text.secondary" sx={{ mb: 2 }}>
+              Time Left:{" "}
+              <span style={{ fontWeight: 600 }}>
+                {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:
+                {String(timeLeft % 60).padStart(2, "0")}
+              </span>
+            </Typography>
+            <form
+              onSubmit={(e) => {
+                setShowDialog(true);
+                e.preventDefault();
+              }}
+            >
+              <Stack spacing={3}>
+                {questions.map((q) =>
+                  q.type === "textarea" ? (
+                    <TextField
+                      key={q.name}
+                      label={q.label}
+                      name={q.name}
+                      required
+                      multiline
+                      minRows={2}
+                      value={answers[q.name] || ""}
+                      onChange={(e) =>
+                        setAnswers((prev) => ({ ...prev, [q.name]: e.target.value }))
+                      }
+                    />
+                  ) : (
+                    <div key={q.name}>
+                      <Typography fontWeight={600} sx={{ mb: 1 }}>
+                        {q.label}
+                      </Typography>
+                      <RadioGroup
+                        name={q.name}
+                        value={answers[q.name] || ""}
+                        onChange={(e) =>
+                          setAnswers((prev) => ({ ...prev, [q.name]: e.target.value }))
+                        }
+                      >
+                        {q.options!.map((opt) => (
+                          <FormControlLabel
+                            key={opt}
+                            value={opt}
+                            control={<Radio required />}
+                            label={opt}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </div>
+                  )
+                )}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="success"
+                  sx={{ py: 1.5, fontWeight: 600 }}
+                  fullWidth
+                >
+                  Submit
+                </Button>
+              </Stack>
+            </form>
+            <Dialog open={showDialog} onClose={() => setShowDialog(false)}>
+              <DialogTitle>Submit Exam</DialogTitle>
+              <DialogContent>
+                <Typography>
+                  Are you sure you want to submit your exam? Once submitted, you cannot make any changes.
+                </Typography>
+                <Typography color="text.secondary" sx={{ mt: 2 }}>
+                  Time remaining:{" "}
+                  {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:
+                  {String(timeLeft % 60).padStart(2, "0")}
+                </Typography>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setShowDialog(false)}>Continue Exam</Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    setShowDialog(false);
+                    handleSubmit();
+                  }}
+                >
+                  Submit Exam
+                </Button>
+              </DialogActions>
+            </Dialog>
           </CardContent>
         </Card>
+      </Container>
+    );
+  }
 
-        {/* Time Warning */}
-        {timeRemaining < 600 && (
-          <Alert severity="error">
-            <Typography variant="body2">
-              <strong>Warning:</strong> Less than 10 minutes remaining! Make sure to submit your exam before time expires.
+  // --- Preview Section ---
+  function renderPreview() {
+    return (
+      <Container maxWidth="sm" sx={{ py: 4 }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h5" fontWeight={700} align="center" gutterBottom>
+              Exam Proctoring Preview
             </Typography>
-          </Alert>
-        )}
-
-        <Grid container spacing={2}>
-          {/* Question Navigation */}
-          <Grid size={{ xs: 12, md: 3 }}>
-            <Card sx={{ position: 'sticky', top: 16 }}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Questions
+            <Typography color="text.secondary" align="center" sx={{ mb: 2 }}>
+              Please grant access to your <b>webcam</b> and <b>screen</b>. You'll see a preview before the exam starts.
+            </Typography>
+            <Stack spacing={3}>
+              <div>
+                <Typography fontWeight={600} sx={{ mb: 1 }}>
+                  Webcam Preview:
                 </Typography>
-                <Grid container spacing={1}>
-                  {Array.from({ length: examData.totalQuestions }, (_, i) => (
-                    <Grid key={i + 1} size={3}>
-                      <Button
-                        variant={currentQuestion === i + 1 ? "contained" : "outlined"}
-                        size="small"
-                        onClick={() => setCurrentQuestion(i + 1)}
-                        sx={{ minWidth: 40, aspectRatio: 1 }}
-                      >
-                        {i + 1}
-                      </Button>
-                    </Grid>
-                  ))}
-                </Grid>
-                
-                <Divider sx={{ my: 2 }} />
-                
-                <Stack spacing={2}>
-                  <Typography variant="subtitle2" fontWeight={600}>
-                    Proctoring Status
-                  </Typography>
-                  <Stack spacing={1}>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <Camera color="success" />
-                      <Typography variant="body2">Camera Active</Typography>
-                    </Stack>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <VolumeUp color="success" />
-                      <Typography variant="body2">Audio Monitoring</Typography>
-                    </Stack>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <Security color="success" />
-                      <Typography variant="body2">Browser Locked</Typography>
-                    </Stack>
-                  </Stack>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Question Content */}
-          <Grid size={{ xs: 12, md: 9 }}>
-            <Card>
-              <CardContent sx={{ p: 4 }}>
-                <Stack spacing={4}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h6" fontWeight={600}>
-                      Question {currentQuestion}
-                    </Typography>
-                    <IconButton>
-                      <Help />
-                    </IconButton>
-                  </Stack>
-                  
-                  {/* Question content would go here */}
-                  <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
-                    Solve the following integral: ∫₀¹ (x² + 2x + 1) dx
-                  </Typography>
-                  
-                  {/* Question options/answer area would go here */}
-                  <Card sx={{ bgcolor: 'grey.50' }}>
-                    <CardContent>
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        Your Answer:
-                      </Typography>
-                      {/* Answer input components would go here */}
-                      <Typography variant="body1" sx={{ minHeight: 100, p: 2, border: '1px dashed', borderColor: 'grey.300', borderRadius: 1 }}>
-                        [Answer input area - implementation depends on question type]
-                      </Typography>
-                    </CardContent>
-                  </Card>
-
-                  {/* Navigation buttons */}
-                  <Stack direction="row" justifyContent="space-between">
-                    <Button
-                      variant="outlined"
-                      onClick={() => setCurrentQuestion(Math.max(1, currentQuestion - 1))}
-                      disabled={currentQuestion === 1}
-                    >
-                      Previous
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={() => setCurrentQuestion(Math.min(examData.totalQuestions, currentQuestion + 1))}
-                      disabled={currentQuestion === examData.totalQuestions}
-                    >
-                      Next
-                    </Button>
-                  </Stack>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-
-        {/* Submit Dialog */}
-        <Dialog open={showSubmitDialog} onClose={() => setShowSubmitDialog(false)}>
-          <DialogTitle>Submit Exam</DialogTitle>
-          <DialogContent>
-            <Typography variant="body1">
-              Are you sure you want to submit your exam? You have answered {currentQuestion} out of {examData.totalQuestions} questions.
-              Once submitted, you cannot make any changes.
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-              Time remaining: {formatTime(timeRemaining)}
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setShowSubmitDialog(false)}>
-              Continue Exam
+                <video
+                  ref={webcamPreviewRef}
+                  autoPlay
+                  muted
+                  playsInline
+                  style={{ width: "100%", background: "#000", borderRadius: 8 }}
+                />
+              </div>
+              <div>
+                <Typography fontWeight={600} sx={{ mb: 1 }}>
+                  Screen Preview:
+                </Typography>
+                <video
+                  ref={screenPreviewRef}
+                  autoPlay
+                  muted
+                  playsInline
+                  style={{ width: "100%", background: "#000", borderRadius: 8 }}
+                />
+              </div>
+            </Stack>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, py: 1.5, fontWeight: 600 }}
+              fullWidth
+              onClick={handleStartExam}
+            >
+              Start Exam
             </Button>
-            <Button variant="contained" color="primary">
-              Submit Exam
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Stack>
-    </Container>
-  );
+            {permissionError && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {permissionError}
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      </Container>
+    );
+  }
+
+  // --- Render ---
+  if (step === "preview") return renderPreview();
+  if (step === "exam") return renderExamForm();
+  return renderResults();
 }

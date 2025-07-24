@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Exam Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .recording-indicator {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .exam-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .timer-warning {
+            color: #ef4444;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.5; }
+        }
+        
+        .focus-violation {
+            background: linear-gradient(45deg, #fee2e2, #fecaca);
+            border-left: 4px solid #ef4444;
+        }
+        
+        .recording-status {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Preview Page -->
+    <div id="previewPage" class="min-h-screen flex items-center justify-center exam-container">
+        <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 max-w-2xl w-full mx-4">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">Physics Exam Portal</h1>
+                <p class="text-gray-600">Secure Online Examination System</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <!-- Camera Preview -->
+                <div class="bg-gray-900 rounded-xl overflow-hidden relative">
+                    <video id="cameraPreview" class="w-full h-48 object-cover" muted autoplay></video>
+                    <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs">
+                        Camera
+                    </div>
+                    <div id="cameraStatus" class="absolute bottom-2 left-2 text-white text-sm bg-black/50 px-2 py-1 rounded">
+                        Not Connected
+                    </div>
+                </div>
+                
+                <!-- Screen Preview -->
+                <div class="bg-gray-900 rounded-xl overflow-hidden relative">
+                    <video id="screenPreview" class="w-full h-48 object-cover" muted autoplay></video>
+                    <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded text-xs">
+                        Screen
+                    </div>
+                    <div id="screenStatus" class="absolute bottom-2 left-2 text-white text-sm bg-black/50 px-2 py-1 rounded">
+                        Not Connected
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+                <button id="enableCamera" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-lg transition-colors font-semibold">
+                    Enable Camera Access
+                </button>
+                <button id="enableScreen" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg transition-colors font-semibold">
+                    Enable Screen Recording
+                </button>
+            </div>
+            
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                <h3 class="font-semibold text-yellow-800">Exam Instructions:</h3>
+                <ul class="text-yellow-700 text-sm mt-2 space-y-1">
+                    <li>• Time limit: 5 minutes</li>
+                    <li>• 5 Multiple Choice Questions</li>
+                    <li>• Do not switch tabs or applications</li>
+                    <li>• Keep your face visible to the camera</li>
+                    <li>• Any suspicious activity will be recorded</li>
+                </ul>
+            </div>
+            
+            <button id="startExam" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-lg transition-colors font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                Start Exam
+            </button>
+        </div>
+    </div>
+
+    <!-- Exam Page -->
+    <div id="examPage" class="hidden min-h-screen bg-gray-50">
+        <!-- Header -->
+        <div class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-gray-800">Physics Exam</h1>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-red-500 rounded-full recording-indicator"></div>
+                        <span class="text-sm text-gray-600">Recording Active</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <div id="timer" class="text-2xl font-bold text-blue-600">05:00</div>
+                    <div id="focusCounter" class="text-sm text-gray-600">Focus Lost: 0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 py-6 flex gap-6">
+            <!-- Main Content -->
+            <div class="flex-1">
+                <div id="questionsContainer" class="space-y-6">
+                    <!-- Questions will be dynamically loaded here -->
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button id="submitExam" class="bg-green-600 hover:bg-green-700 text-white py-3 px-8 rounded-lg transition-colors font-semibold">
+                        Submit Exam
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Camera Feed -->
+            <div class="w-80">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden sticky top-4">
+                    <div class="bg-gray-800 text-white px-4 py-2 text-sm font-semibold flex justify-between items-center">
+                        <span>Live Camera Feed</span>
+                        <div id="recordingStatus" class="text-xs recording-status px-2 py-1 rounded">
+                            ● REC
+                        </div>
+                    </div>
+                    <video id="examCamera" class="w-full h-60 object-cover" muted autoplay></video>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="resultsPage" class="hidden min-h-screen bg-gray-50 py-8">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">Exam Completed</h1>
+                    <p class="text-gray-600">Your exam has been submitted successfully</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="font-semibold text-blue-800 mb-2">Exam Statistics</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Time Taken:</span>
+                                <span id="timeTaken" class="font-semibold">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Questions Answered:</span>
+                                <span id="questionsAnswered" class="font-semibold">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Focus Violations:</span>
+                                <span id="totalViolations" class="font-semibold text-red-600">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 rounded-lg p-6">
+                        <h3 class="font-semibold text-green-800 mb-2">Proctoring Status</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Camera Status:</span>
+                                <span class="font-semibold text-green-600">✓ Complete</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Screen Recording:</span>
+                                <span class="font-semibold text-green-600">✓ Complete</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Recordings Saved:</span>
+                                <span id="recordingsSaved" class="font-semibold">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="violationsLog" class="mb-8">
+                    <h3 class="font-semibold text-gray-800 mb-4">Activity Log & Recorded Evidence</h3>
+                    <div id="violationsList" class="space-y-4">
+                        <!-- Violations will be listed here -->
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button onclick="location.reload()" class="bg-blue-600 hover:bg-blue-700 text-white py-3 px-8 rounded-lg transition-colors font-semibold">
+                        Take Another Exam
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let cameraStream = null;
+        let screenStream = null;
+        let isRecording = false;
+        let examStartTime = null;
+        let examTimer = null;
+        let timeRemaining = 300; // 5 minutes in seconds
+        let focusViolations = 0;
+        let violationLog = [];
+        let violationRecordings = [];
+        let answers = {};
+        let cameraEnabled = false;
+        let screenEnabled = false;
+        
+        // Physics questions
+        const questions = [
+            {
+                id: 1,
+                question: "What is the speed of light in vacuum?",
+                options: ["3 × 10⁸ m/s", "2 × 10⁸ m/s", "4 × 10⁸ m/s", "1 × 10⁸ m/s"],
+                correct: 0
+            },
+            {
+                id: 2,
+                question: "Which law states that force equals mass times acceleration?",
+                options: ["Newton's First Law", "Newton's Second Law", "Newton's Third Law", "Law of Conservation"],
+                correct: 1
+            },
+            {
+                id: 3,
+                question: "What is the SI unit of electric current?",
+                options: ["Volt", "Ohm", "Ampere", "Watt"],
+                correct: 2
+            },
+            {
+                id: 4,
+                question: "At what temperature does water boil at standard atmospheric pressure?",
+                options: ["90°C", "95°C", "100°C", "105°C"],
+                correct: 2
+            },
+            {
+                id: 5,
+                question: "What type of wave is sound?",
+                options: ["Electromagnetic", "Longitudinal", "Transverse", "Standing"],
+                correct: 1
+            }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('enableCamera').addEventListener('click', enableCamera);
+            document.getElementById('enableScreen').addEventListener('click', enableScreenShare);
+            document.getElementById('startExam').addEventListener('click', startExam);
+            document.getElementById('submitExam').addEventListener('click', submitExam);
+        }
+
+        async function enableCamera() {
+            try {
+                const button = document.getElementById('enableCamera');
+                button.textContent = 'Requesting Camera...';
+                button.disabled = true;
+                
+                cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 640 }, 
+                        height: { ideal: 480 },
+                        facingMode: 'user'
+                    }, 
+                    audio: true 
+                });
+                
+                const preview = document.getElementById('cameraPreview');
+                preview.srcObject = cameraStream;
+                await preview.play();
+                
+                document.getElementById('cameraStatus').textContent = 'Connected ✓';
+                button.textContent = '✓ Camera Enabled';
+                button.classList.add('bg-green-500', 'hover:bg-green-600');
+                button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                button.disabled = false;
+                
+                cameraEnabled = true;
+                checkReadyToStart();
+            } catch (error) {
+                console.error('Camera error:', error);
+                document.getElementById('cameraStatus').textContent = 'Access Denied';
+                const button = document.getElementById('enableCamera');
+                button.textContent = 'Camera Access Denied - Retry';
+                button.disabled = false;
+                alert('Camera access is required for the exam. Please allow camera access and try again.');
+            }
+        }
+
+        async function enableScreenShare() {
+            try {
+                const button = document.getElementById('enableScreen');
+                button.textContent = 'Requesting Screen...';
+                button.disabled = true;
+                
+                screenStream = await navigator.mediaDevices.getDisplayMedia({ 
+                    video: { 
+                        mediaSource: 'screen',
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 }
+                    },
+                    audio: true
+                });
+                
+                const preview = document.getElementById('screenPreview');
+                preview.srcObject = screenStream;
+                await preview.play();
+                
+                document.getElementById('screenStatus').textContent = 'Connected ✓';
+                button.textContent = '✓ Screen Enabled';
+                button.classList.add('bg-green-500', 'hover:bg-green-600');
+                button.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                button.disabled = false;
+                
+                screenEnabled = true;
+                checkReadyToStart();
+                
+                // Handle screen share ending
+                screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+                    alert('Screen sharing was stopped. Please restart to continue the exam.');
+                    location.reload();
+                });
+                
+            } catch (error) {
+                console.error('Screen share error:', error);
+                document.getElementById('screenStatus').textContent = 'Access Denied';
+                const button = document.getElementById('enableScreen');
+                button.textContent = 'Screen Access Denied - Retry';
+                button.disabled = false;
+                alert('Screen recording access is required for the exam. Please allow screen sharing and try again.');
+            }
+        }
+
+        function checkReadyToStart() {
+            if (cameraEnabled && screenEnabled) {
+                const startButton = document.getElementById('startExam');
+                startButton.disabled = false;
+                startButton.classList.add('animate-pulse');
+            }
+        }
+
+        function startExam() {
+            document.getElementById('previewPage').classList.add('hidden');
+            document.getElementById('examPage').classList.remove('hidden');
+            
+            // Setup exam camera
+            const examCamera = document.getElementById('examCamera');
+            examCamera.srcObject = cameraStream;
+            examCamera.play();
+            
+            // Start monitoring
+            setupFocusMonitoring();
+            
+            // Load questions
+            loadQuestions();
+            
+            // Start timer
+            startTimer();
+            
+            examStartTime = new Date();
+            isRecording = true;
+            
+            console.log('Exam started, monitoring active');
+        }
+
+        function setupFocusMonitoring() {
+            // Focus tracking
+            window.addEventListener('blur', handleFocusLoss);
+            window.addEventListener('focus', handleFocusGain);
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            
+            // Additional monitoring
+            document.addEventListener('keydown', function(e) {
+                // Detect Alt+Tab, Ctrl+Tab, etc.
+                if ((e.altKey && e.key === 'Tab') || 
+                    (e.ctrlKey && e.key === 'Tab') ||
+                    (e.metaKey && e.key === 'Tab')) {
+                    recordViolation('Attempted tab switching (keyboard shortcut)');
+                }
+            });
+        }
+
+        function loadQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card bg-white rounded-lg shadow-md p-6';
+                
+                questionDiv.innerHTML = `
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        Question ${index + 1}: ${q.question}
+                    </h3>
+                    <div class="space-y-3">
+                        ${q.options.map((option, optIndex) => `
+                            <label class="flex items-center p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
+                                <input type="radio" name="question${q.id}" value="${optIndex}" class="mr-3 text-blue-600">
+                                <span class="text-gray-700">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(questionDiv);
+                
+                // Add event listeners for answers
+                const radios = questionDiv.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        answers[q.id] = parseInt(this.value);
+                    });
+                });
+            });
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            
+            examTimer = setInterval(() => {
+                timeRemaining--;
+                
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeRemaining <= 60) {
+                    timerElement.classList.add('timer-warning');
+                }
+                
+                if (timeRemaining <= 0) {
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function handleFocusLoss() {
+            if (isRecording) {
+                recordViolation('Window lost focus');
+            }
+        }
+
+        function handleFocusGain() {
+            // Focus regained - could add positive logging here
+        }
+
+        function handleVisibilityChange() {
+            if (document.hidden && isRecording) {
+                recordViolation('Tab/Window switched or minimized');
+            }
+        }
+
+        async function recordViolation(type) {
+            if (!examStartTime || !isRecording) return;
+            
+            focusViolations++;
+            const violationId = `violation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            const violation = {
+                id: violationId,
+                type: type,
+                timestamp: new Date(),
+                timeFromStart: Date.now() - examStartTime.getTime()
+            };
+            
+            violationLog.push(violation);
+            
+            // Update counter
+            document.getElementById('focusCounter').textContent = `Focus Lost: ${focusViolations}`;
+            
+            // Start recording for this violation
+            await startViolationRecording(violationId);
+            
+            console.log('Violation recorded:', type, 'ID:', violationId);
+        }
+
+        async function startViolationRecording(violationId) {
+            console.log('Starting violation recording for:', violationId);
+            
+            const violationData = {
+                id: violationId,
+                cameraBlob: null,
+                screenBlob: null,
+                recordingComplete: false
+            };
+            
+            violationRecordings.push(violationData);
+            
+            const recordingPromises = [];
+            
+            // Record camera
+            if (cameraStream) {
+                const cameraPromise = new Promise((resolve) => {
+                    try {
+                        const cameraRecorder = new MediaRecorder(cameraStream, {
+                            mimeType: 'video/webm;codecs=vp8,opus'
+                        });
+                        
+                        const cameraChunks = [];
+                        
+                        cameraRecorder.ondataavailable = function(event) {
+                            if (event.data && event.data.size > 0) {
+                                cameraChunks.push(event.data);
+                            }
+                        };
+                        
+                        cameraRecorder.onstop = function() {
+                            if (cameraChunks.length > 0) {
+                                violationData.cameraBlob = new Blob(cameraChunks, { type: 'video/webm' });
+                                console.log('Camera recording saved for', violationId, 'Size:', violationData.cameraBlob.size);
+                            }
+                            resolve();
+                        };
+                        
+                        cameraRecorder.onerror = function(error) {
+                            console.error('Camera recording error:', error);
+                            resolve();
+                        };
+                        
+                        cameraRecorder.start(100); // Collect data every 100ms
+                        
+                        setTimeout(() => {
+                            if (cameraRecorder.state === 'recording') {
+                                cameraRecorder.stop();
+                            }
+                        }, 5000);
+                        
+                    } catch (error) {
+                        console.error('Camera recorder setup error:', error);
+                        resolve();
+                    }
+                });
+                
+                recordingPromises.push(cameraPromise);
+            }
+            
+            // Record screen
+            if (screenStream) {
+                const screenPromise = new Promise((resolve) => {
+                    try {
+                        const screenRecorder = new MediaRecorder(screenStream, {
+                            mimeType: 'video/webm;codecs=vp8,opus'
+                        });
+                        
+                        const screenChunks = [];
+                        
+                        screenRecorder.ondataavailable = function(event) {
+                            if (event.data && event.data.size > 0) {
+                                screenChunks.push(event.data);
+                            }
+                        };
+                        
+                        screenRecorder.onstop = function() {
+                            if (screenChunks.length > 0) {
+                                violationData.screenBlob = new Blob(screenChunks, { type: 'video/webm' });
+                                console.log('Screen recording saved for', violationId, 'Size:', violationData.screenBlob.size);
+                            }
+                            resolve();
+                        };
+                        
+                        screenRecorder.onerror = function(error) {
+                            console.error('Screen recording error:', error);
+                            resolve();
+                        };
+                        
+                        screenRecorder.start(100); // Collect data every 100ms
+                        
+                        setTimeout(() => {
+                            if (screenRecorder.state === 'recording') {
+                                screenRecorder.stop();
+                            }
+                        }, 5000);
+                        
+                    } catch (error) {
+                        console.error('Screen recorder setup error:', error);
+                        resolve();
+                    }
+                });
+                
+                recordingPromises.push(screenPromise);
+            }
+            
+            // Wait for all recordings to complete
+            Promise.all(recordingPromises).then(() => {
+                violationData.recordingComplete = true;
+                console.log('All recordings complete for', violationId);
+            });
+        }
+
+        function submitExam() {
+            // Stop timer
+            if (examTimer) {
+                clearInterval(examTimer);
+            }
+            
+            // Stop recording immediately
+            stopRecording();
+            
+            // Hide exam page and show results
+            document.getElementById('examPage').classList.add('hidden');
+            document.getElementById('resultsPage').classList.remove('hidden');
+            
+            // Display results after a short delay to allow recordings to finish
+            setTimeout(() => {
+                displayResults();
+            }, 1000);
+        }
+
+        function stopRecording() {
+            isRecording = false;
+            
+            // Stop camera and screen streams
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => {
+                    track.stop();
+                    console.log('Camera track stopped');
+                });
+                cameraStream = null;
+            }
+            
+            if (screenStream) {
+                screenStream.getTracks().forEach(track => {
+                    track.stop();
+                    console.log('Screen track stopped');
+                });
+                screenStream = null;
+            }
+            
+            console.log('All recording stopped');
+        }
+
+        function displayResults() {
+            const timeTaken = 300 - timeRemaining;
+            const minutes = Math.floor(timeTaken / 60);
+            const seconds = timeTaken % 60;
+            
+            document.getElementById('timeTaken').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('questionsAnswered').textContent = 
+                `${Object.keys(answers).length}/5`;
+            document.getElementById('totalViolations').textContent = focusViolations;
+            
+            // Count actual recordings saved
+            const recordingsWithBlobs = violationRecordings.filter(r => r.cameraBlob || r.screenBlob).length;
+            document.getElementById('recordingsSaved').textContent = `${recordingsWithBlobs} violations`;
+            
+            // Display violations log
+            const violationsList = document.getElementById('violationsList');
+            violationsList.innerHTML = '';
+            
+            if (violationLog.length === 0) {
+                violationsList.innerHTML = `
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <p class="text-green-800 font-semibold">✓ No violations detected. Excellent exam conduct!</p>
+                        <p class="text-green-700 text-sm mt-1">You maintained focus throughout the entire exam.</p>
+                    </div>
+                `;
+            } else {
+                violationLog.forEach((violation, index) => {
+                    const violationDiv = document.createElement('div');
+                    violationDiv.className = 'focus-violation rounded-lg p-4 mb-4';
+                    
+                    const timeFromStart = Math.floor(violation.timeFromStart / 1000);
+                    const mins = Math.floor(timeFromStart / 60);
+                    const secs = timeFromStart % 60;
+                    
+                    // Find corresponding recording
+                    const recording = violationRecordings.find(r => r.id === violation.id);
+                    
+                    violationDiv.innerHTML = `
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <span class="font-semibold text-red-700">Violation ${index + 1}:</span>
+                                <span class="text-gray-700">${violation.type}</span>
+                            </div>
+                            <div class="text-sm text-gray-500 bg-white px-2 py-1 rounded">
+                                ${mins}:${secs.toString().padStart(2, '0')}
+                            </div>
+                        </div>
+                        
+                        ${recording && recording.recordingComplete && (recording.cameraBlob || recording.screenBlob) ? `
+                            <div class="bg-white rounded-lg p-4">
+                                <h4 class="font-semibold text-gray-800 mb-3">📹 Recorded Evidence (5-second clips)</h4>
+                                <div class="grid ${recording.cameraBlob && recording.screenBlob ? 'md:grid-cols-2' : 'grid-cols-1'} gap-4">
+                                    ${recording.cameraBlob ? `
+                                        <div>
+                                            <h5 class="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                                                <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                                                Camera Recording
+                                            </h5>
+                                            <video 
+                                                class="w-full h-32 bg-black rounded border object-cover shadow-sm" 
+                                                controls 
+                                                preload="metadata"
+                                                src="${URL.createObjectURL(recording.cameraBlob)}"
+                                            >
+                                                Your browser does not support video playback.
+                                            </video>
+                                            <p class="text-xs text-gray-500 mt-1">Size: ${(recording.screenBlob.size / 1024).toFixed(1)} KB</p>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                
+                                <div class="flex gap-2 mt-4 pt-3 border-t border-gray-200">
+                                    ${recording.cameraBlob ? `
+                                        <button onclick="downloadRecording('${violation.id}', 'camera')" 
+                                                class="text-xs bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded transition-colors flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/>
+                                            </svg>
+                                            Download Camera
+                                        </button>
+                                    ` : ''}
+                                    ${recording.screenBlob ? `
+                                        <button onclick="downloadRecording('${violation.id}', 'screen')" 
+                                                class="text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded transition-colors flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/>
+                                            </svg>
+                                            Download Screen
+                                        </button>
+                                    ` : ''}
+                                    <div class="flex-1"></div>
+                                    <span class="text-xs text-gray-400 self-center">
+                                        ${violation.timestamp.toLocaleTimeString()}
+                                    </span>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="flex items-center text-gray-600">
+                                    <svg class="w-5 h-5 mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <span class="text-sm">
+                                        ${recording ? 'Processing recording...' : 'Recording failed to capture'}
+                                    </span>
+                                </div>
+                            </div>
+                        `}
+                    `;
+                    
+                    violationsList.appendChild(violationDiv);
+                });
+            }
+        }
+        
+        // Download recording function
+        function downloadRecording(violationId, recordingType) {
+            const recording = violationRecordings.find(r => r.id === violationId);
+            if (!recording) {
+                alert('Recording not found!');
+                return;
+            }
+            
+            const blob = recordingType === 'camera' ? recording.cameraBlob : recording.screenBlob;
+            if (!blob) {
+                alert('Recording blob not available!');
+                return;
+            }
+            
+            try {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `exam-violation-${violationId}-${recordingType}-${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.webm`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                console.log('Download initiated for:', violationId, recordingType);
+            } catch (error) {
+                console.error('Download error:', error);
+                alert('Error downloading recording. Please try again.');
+            }
+        }
+
+        // Test violation function (for demonstration)
+        function triggerTestViolation() {
+            if (isRecording) {
+                recordViolation('Manual test violation');
+            }
+        }
+
+        // Add keyboard shortcut for testing (Ctrl+Shift+T)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'T' && isRecording) {
+                e.preventDefault();
+                triggerTestViolation();
+                console.log('Test violation triggered');
+            }
+        });
+
+        // Additional error handling
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+        });
+
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+        });
+
+        // Prevent common cheating attempts
+        document.addEventListener('contextmenu', function(e) {
+            if (isRecording) {
+                e.preventDefault();
+                recordViolation('Right-click menu attempted');
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (isRecording) {
+                // Prevent F12, Ctrl+Shift+I, Ctrl+U, etc.
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.key === 'u') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'C')) {
+                    e.preventDefault();
+                    recordViolation('Developer tools access attempted');
+                }
+            }
+        });
+
+        console.log('Exam proctoring system initialized');
+    </script>
+</body>
+</html>
